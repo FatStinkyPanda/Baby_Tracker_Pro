@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Baby Tracker Pro - Track feeding, diapers, sleep, and predict your baby's needs with insightful analysis.">
+    <meta name="description" content="Baby Tracker Pro - Intelligently track feeding, diapers, sleep, and predict your baby's needs with insightful analysis and guidance.">
 
     <title>Baby Tracker Pro</title>
 
-    <!-- Favicon (Emoji SVG - works in modern browsers) -->
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Chart.js Library (Use CDN or download locally) -->
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vrG4FmQ=" crossorigin="anonymous"></script>
-    <!-- Consider adding integrity checks if using CDN -->
-
 </head>
 <body>
 
@@ -32,62 +30,98 @@
          Main Content Area
          ====================================================================== -->
     <main>
+        <div id="initial-guidance" class="guidance-banner" style="display: none;">
+            Welcome to Baby Tracker Pro! Start by logging your baby's activities like feeds, diapers, or sleep using the buttons below or in the dashboard cards. <button class="dismiss-guidance" aria-label="Dismiss welcome message">×</button>
+        </div>
 
         <!-- ------------------------------------------------------------------
              Dashboard Section: Quick Overview & Actions
              ------------------------------------------------------------------ -->
         <section class="dashboard" aria-labelledby="dashboard-heading">
-            <h2 id="dashboard-heading">Dashboard</h2>
+            <div class="section-header">
+                <h2 id="dashboard-heading">Dashboard</h2>
+                <button class="help-btn" data-help-topic="dashboard" aria-label="Help for Dashboard" aria-describedby="dashboard-heading">?</button>
+            </div>
             <div class="status-grid">
 
                 <!-- Feeding Status Card -->
-                <div class="status-card">
+                <div class="status-card" id="feeding-card">
                     <h3><span class="icon" aria-hidden="true">🍼</span> Feeding</h3>
                     <div class="last-event">Last: <span id="last-feed-time">N/A</span> (<span id="last-feed-details"></span>)</div>
-                    <div class="next-prediction">Next Estimate: <span id="next-feed-prediction">Calculating...</span></div>
-                    <div class="progress-bar-container" aria-label="Feeding progress">
-                        <div id="feed-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="next-prediction">
+                        Next Estimate: <span id="next-feed-prediction">Calculating...</span>
+                        <span class="prediction-confidence" id="feed-confidence" title="Prediction confidence based on data consistency"></span>
+                    </div>
+                    <div class="progress-bar-container" aria-labelledby="feed-progress-label">
+                        <div id="feed-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <span class="progress-bar-label" id="feed-progress-label">0%</span>
+                        </div>
                     </div>
                     <button class="quick-action" data-action="logFeed">Log Feed</button>
                 </div>
 
                 <!-- Diaper Status Card -->
-                <div class="status-card">
+                <div class="status-card" id="diaper-card">
                     <h3><span class="icon" aria-hidden="true">💩</span> Diaper</h3>
                     <div class="last-event">Last Change: <span id="last-diaper-time">N/A</span> (<span id="last-diaper-type"></span>)</div>
-                    <div class="next-prediction">Next Wet Est.: <span id="next-wet-prediction">Calculating...</span></div>
-                    <div class="next-prediction">Next Dirty Est.: <span id="next-dirty-prediction">Calculating...</span></div>
-                    <div class="progress-bar-container" aria-label="Diaper progress: Wet">
-                        <div id="diaper-progress-wet" class="progress-bar wet" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="next-prediction">
+                        Next Wet Est.: <span id="next-wet-prediction">Calculating...</span>
+                        <span class="prediction-confidence" id="wet-confidence" title="Prediction confidence based on data consistency"></span>
                     </div>
-                     <div class="progress-bar-container" aria-label="Diaper progress: Dirty">
-                        <div id="diaper-progress-dirty" class="progress-bar dirty" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="next-prediction">
+                        Next Dirty Est.: <span id="next-dirty-prediction">Calculating...</span>
+                        <span class="prediction-confidence" id="dirty-confidence" title="Prediction confidence based on data consistency"></span>
+                    </div>
+                    <div class="progress-bar-container" aria-labelledby="diaper-wet-label">
+                        <div id="diaper-progress-wet" class="progress-bar wet" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <span class="progress-bar-label" id="diaper-wet-label">Wet: 0%</span>
+                        </div>
+                    </div>
+                     <div class="progress-bar-container" aria-labelledby="diaper-dirty-label">
+                        <div id="diaper-progress-dirty" class="progress-bar dirty" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                             <span class="progress-bar-label" id="diaper-dirty-label">Dirty: 0%</span>
+                        </div>
                     </div>
                     <button class="quick-action" data-action="logDiaper">Log Diaper</button>
                 </div>
 
                 <!-- Sleep Status Card -->
-                <div class="status-card">
+                <div class="status-card" id="sleep-card">
                     <h3><span class="icon" aria-hidden="true">😴</span> Sleep</h3>
                     <div class="last-event">Last Sleep Started: <span id="last-sleep-start-time">N/A</span></div>
                     <div class="last-event">Last Sleep Ended: <span id="last-sleep-end-time">N/A</span> (<span id="last-sleep-duration"></span>)</div>
-                    <div class="next-prediction">Next Nap Est.: <span id="next-sleep-prediction">Calculating...</span></div>
-                    <div class="progress-bar-container" aria-label="Sleep/Awake progress">
-                        <div id="sleep-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="next-prediction">
+                        Next Nap Est.: <span id="next-sleep-prediction">Calculating...</span>
+                         <span class="prediction-confidence" id="sleep-confidence" title="Prediction confidence based on data consistency"></span>
                     </div>
-                    <button class="quick-action" data-action="toggleSleep" id="sleep-toggle-button">Start Sleep</button>
+                    <div class="progress-bar-container" aria-labelledby="sleep-progress-label">
+                        <div id="sleep-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                             <span class="progress-bar-label" id="sleep-progress-label">Awake: 0%</span>
+                        </div>
+                    </div>
+                    <div class="button-group"> <!-- Group related buttons -->
+                        <button class="quick-action" data-action="toggleSleep" id="sleep-toggle-button">Start Sleep</button>
+                        <button class="quick-action secondary small" data-action="logPastSleep" title="Manually log a past sleep period">Log Past Sleep</button>
+                    </div>
                 </div>
 
                  <!-- Pumping Status Card -->
-                <div class="status-card">
+                <div class="status-card" id="pumping-card">
                     <h3><span class="icon" aria-hidden="true">🥛</span> Pumping</h3>
                     <div class="last-event">Last Pump: <span id="last-pump-time">N/A</span> (<span id="last-pump-amount"></span>)</div>
-                    <div class="next-prediction">Next Scheduled: <span id="next-pump-schedule">Set schedule...</span></div>
-                    <div class="progress-bar-container" aria-label="Pumping progress">
-                        <div id="pump-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="next-prediction">
+                        Next Scheduled: <span id="next-pump-schedule">Set schedule...</span>
+                        <button class="help-btn help-btn-inline" data-help-topic="pumping-schedule" aria-label="Help for Pumping Schedule">?</button>
                     </div>
-                    <button class="quick-action" data-action="logPump">Log Pump</button>
-                    <button class="quick-action secondary" data-action="managePumpSchedule">Schedule</button>
+                    <div class="progress-bar-container" aria-labelledby="pump-progress-label">
+                        <div id="pump-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                             <span class="progress-bar-label" id="pump-progress-label">0%</span>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="quick-action" data-action="logPump">Log Pump</button>
+                        <button class="quick-action secondary" data-action="managePumpSchedule">Schedule</button>
+                    </div>
                 </div>
 
             </div>
@@ -98,8 +132,9 @@
              ------------------------------------------------------------------ -->
         <div id="log-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
             <div class="modal-content">
-                <button class="close-button" aria-label="Close modal">&times;</button>
+                <button class="close-button" aria-label="Close modal">×</button>
                 <h3 id="modal-title">Log Event</h3>
+                 <button class="help-btn help-btn-modal" data-help-topic="logging" aria-label="Help for Logging Events">?</button>
                 <form id="log-form" novalidate>
                     <!-- Form fields will be dynamically generated by script.js -->
                     <p>Loading form...</p>
@@ -107,15 +142,29 @@
             </div>
         </div>
 
+        <!-- ------------------------------------------------------------------
+             Help Modal
+             ------------------------------------------------------------------ -->
+        <div id="help-modal" class="modal help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" style="display: none;">
+             <div class="modal-content">
+                 <button class="close-button" aria-label="Close help">×</button>
+                 <h3 id="help-modal-title">Help</h3>
+                 <div id="help-modal-content">
+                     <p>Loading help content...</p>
+                 </div>
+             </div>
+         </div>
+
+
          <!-- ------------------------------------------------------------------
               Alarm Notification Area
               ------------------------------------------------------------------ -->
         <div id="alarm-notification" class="alarm" role="alert" aria-live="assertive" style="display: none;">
             <div class="alarm-content">
                 <span id="alarm-message">Alarm Message Placeholder</span>
+                 <button class="help-btn help-btn-alarm" data-help-topic="alarms" aria-label="Help for Alarms">?</button>
                 <div class="snooze-options">
                     <span>Snooze:</span>
-                    <!-- Snooze durations are examples, ensure they match script.js -->
                     <button data-snooze="5" aria-label="Snooze alarm for 5 minutes">5m</button>
                     <button data-snooze="10" aria-label="Snooze alarm for 10 minutes">10m</button>
                     <button data-snooze="20" aria-label="Snooze alarm for 20 minutes">20m</button>
@@ -124,7 +173,6 @@
                     <button data-snooze="pause" class="secondary" aria-label="Pause all alarms until resumed">Pause All</button>
                 </div>
                 <button id="dismiss-alarm" aria-label="Dismiss this alarm">Dismiss</button>
-                <!-- This button is shown only when paused via the alarm popup -->
                  <button id="resume-alarms" style="display: none;" aria-label="Resume alarms">Resume Alarms</button>
             </div>
         </div>
@@ -133,19 +181,25 @@
              Data Analysis Section (Tabs)
              ------------------------------------------------------------------ -->
         <section class="data-analysis" aria-labelledby="analysis-heading">
-            <h2 id="analysis-heading">Analysis &amp; History</h2>
+             <div class="section-header">
+                <h2 id="analysis-heading">Analysis & History</h2>
+                 <button class="help-btn" data-help-topic="analysis" aria-label="Help for Analysis and History" aria-describedby="analysis-heading">?</button>
+            </div>
 
             <!-- Tab Navigation -->
             <nav class="tabs" role="tablist" aria-label="Data Sections">
-                <button class="tab-link active" role="tab" aria-selected="true" aria-controls="history" data-tab="history">Event History</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="charts" data-tab="charts">Charts</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="reports" data-tab="reports">Reports &amp; Projections</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="settings" data-tab="settings">Settings</button>
+                <button class="tab-link active" id="history-tab" role="tab" aria-selected="true" aria-controls="history" data-tab="history">Event History</button>
+                <button class="tab-link" id="charts-tab" role="tab" aria-selected="false" aria-controls="charts" data-tab="charts">Charts</button>
+                <button class="tab-link" id="reports-tab" role="tab" aria-selected="false" aria-controls="reports" data-tab="reports">Reports & Projections</button>
+                <button class="tab-link" id="settings-tab" role="tab" aria-selected="false" aria-controls="settings" data-tab="settings">Settings</button>
             </nav>
 
             <!-- Tab Content Panels -->
             <div id="history" class="tab-content active" role="tabpanel" aria-labelledby="history-tab">
-                <h3>Event History</h3>
+                 <div class="section-header-inline">
+                    <h3>Event History</h3>
+                    <button class="help-btn help-btn-inline" data-help-topic="history" aria-label="Help for Event History">?</button>
+                 </div>
                 <div class="filter-controls">
                     <label for="history-filter">Filter by Type:</label>
                     <select id="history-filter">
@@ -154,7 +208,7 @@
                         <option value="diaper">Diaper</option>
                         <option value="sleep">Sleep</option>
                         <option value="pump">Pumping</option>
-                        <option value="mood">Mood</option> <!-- Example: Add other types as needed -->
+                        <option value="mood">Mood</option>
                         <option value="gas">Gas/Fussiness</option>
                     </select>
                     <label for="history-limit">Show:</label>
@@ -166,13 +220,15 @@
                     </select>
                 </div>
                 <ul id="event-list" aria-live="polite">
-                    <!-- Event list items will be populated by script.js -->
-                    <li>Loading history...</li>
+                    <li class="empty-list-item">No events recorded yet. Use the dashboard buttons to start logging!</li>
                 </ul>
             </div>
 
             <div id="charts" class="tab-content" role="tabpanel" aria-labelledby="charts-tab" style="display: none;">
-                <h3>Charts</h3>
+                 <div class="section-header-inline">
+                    <h3>Charts</h3>
+                     <button class="help-btn help-btn-inline" data-help-topic="charts" aria-label="Help for Charts">?</button>
+                 </div>
                  <div class="chart-controls">
                      <label for="chart-type">Select Chart:</label>
                      <select id="chart-type">
@@ -189,30 +245,36 @@
             </div>
 
             <div id="reports" class="tab-content" role="tabpanel" aria-labelledby="reports-tab" style="display: none;">
-                <h3>Reports &amp; Projections</h3>
+                 <div class="section-header-inline">
+                    <h3>Reports & Projections</h3>
+                    <button class="help-btn help-btn-inline" data-help-topic="reports" aria-label="Help for Reports and Projections">?</button>
+                 </div>
                 <div id="report-content">
                      <h4>Daily Summary (Today)</h4>
-                     <ul id="daily-summary" aria-live="polite"><li>Calculating...</li></ul>
+                     <ul id="daily-summary" aria-live="polite"><li class="empty-list-item">No events yet today to summarize.</li></ul>
 
                      <h4>Next 24 Hours Projection (Estimates)</h4>
-                     <p><small>Note: Projections are estimates based on recent patterns and may vary.</small></p>
-                     <ul id="24h-projection" aria-live="polite"><li>Calculating...</li></ul>
-
-                     <!-- Add space for future weekly/monthly reports -->
+                     <p><small>Note: Projections are estimates based on recent patterns and improve with more data. They may vary.</small></p>
+                     <ul id="24h-projection" aria-live="polite"><li class="empty-list-item">Not enough data for projections yet. Keep logging!</li></ul>
                 </div>
             </div>
 
              <div id="settings" class="tab-content" role="tabpanel" aria-labelledby="settings-tab" style="display: none;">
-                <h3>Settings</h3>
+                <div class="section-header-inline">
+                    <h3>Settings</h3>
+                    <button class="help-btn help-btn-inline" data-help-topic="settings" aria-label="Help for Settings">?</button>
+                </div>
 
                 <h4>Data Management</h4>
+                 <button class="help-btn help-btn-inline" data-help-topic="data-management" aria-label="Help for Data Management">?</button>
                 <button id="export-data">Export Data Backup</button>
                 <label for="import-data-file" class="button-like-label">Import Data Backup</label>
                 <input type="file" id="import-data-file" accept=".json" aria-label="Select backup file to import">
                 <button id="clear-data" class="danger">Clear All Data</button>
-                <p><small>Exports create a JSON file backup. Imports overwrite current data.</small></p>
+                <p><small>Exports create a JSON file backup. Imports overwrite current data. Use with caution!</small></p>
 
                 <h4>Alarm Settings</h4>
+                 <button class="help-btn help-btn-inline" data-help-topic="alarm-settings" aria-label="Help for Alarm Settings">?</button>
                  <label for="alarm-sound-enabled">
                      <input type="checkbox" id="alarm-sound-enabled" checked>
                      Enable Alarm Sound (Simple Beep)
@@ -221,6 +283,7 @@
                  <button id="force-resume-alarms" class="secondary" style="display: none;">Force Resume Alarms (Clear Snoozes)</button>
 
                  <h4>Pumping Schedule</h4>
+                  <button class="help-btn help-btn-inline" data-help-topic="pumping-schedule-settings" aria-label="Help for Pumping Schedule Settings">?</button>
                  <div id="pump-schedule-settings">
                      <label for="pump-interval">Pump approx. every (hours):</label>
                      <input type="number" id="pump-interval" min="1" max="12" step="0.5" placeholder="e.g., 3">
@@ -241,7 +304,7 @@
          Footer
          ====================================================================== -->
     <footer>
-        <p>&copy; Baby Tracker Pro - Helping parents one datapoint at a time.</p>
+        <p>© Baby Tracker Pro - Helping parents one datapoint at a time.</p>
     </footer>
 
     <!-- ======================================================================

@@ -1,1018 +1,671 @@
 /* ==========================================================================
    Baby Tracker Pro - style.css
+   Version: 2.1 (Enhanced with Guidance, Help, Labels, Confidence)
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    * Base & Reset
    -------------------------------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
-
-:root {
-    /* Color Palette (Soft & Calming) */
-    --primary-color: #6ECDCF; /* Soft Teal */
-    --primary-dark: #5aa6a8;
-    --primary-light: #a7e0e1;
-    --secondary-color: #F8B195; /* Soft Peach */
-    --secondary-dark: #f6a081;
-    --accent-color: #F67280; /* Soft Coral */
-    --accent-dark: #e85f6d;
-    --success-color: #97C1A9; /* Soft Green */
-    --warning-color: #FAD02E; /* Soft Yellow */
-    --info-color: #AEC6CF; /* Soft Blue/Grey */
-    --diaper-wet-color: var(--warning-color);
-    --diaper-dirty-color: #A0522D; /* Sienna Brown */
-    --diaper-mixed-color: #C19A6B; /* Camel */
-
-    /* Greys & Backgrounds */
-    --bg-color: #F7F9FC; /* Very light blue/grey */
-    --card-bg: #FFFFFF;
-    --modal-bg: #FFFFFF;
-    --border-color: #E0E6ED;
-    --input-border-color: #CED4DA;
-    --text-color: #343A40;
-    --text-muted: #6C757D;
-    --text-light: #F8F9FA;
-    --shadow-color: rgba(0, 0, 0, 0.08);
-    --shadow-hover-color: rgba(0, 0, 0, 0.12);
-
-    /* Typography */
-    --font-family: 'Nunito', sans-serif;
-    --font-size-base: 1rem; /* Typically 16px */
-    --font-size-lg: 1.2rem;
-    --font-size-sm: 0.9rem;
-    --font-size-xs: 0.8rem;
-    --line-height-base: 1.6;
-
-    /* Spacing */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-
-    /* Borders & Radius */
-    --border-radius: 8px;
-    --border-radius-sm: 4px;
-    --border-width: 1px;
-
-    /* Transitions */
-    --transition-speed: 0.2s;
-    --transition-timing: ease-in-out;
-
-    /* Z-Indexes */
-    --z-modal: 1000;
-    --z-alarm: 2000;
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-size: var(--font-size-base);
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: var(--font-family);
-    line-height: var(--line-height-base);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color var(--transition-speed) var(--transition-timing);
-}
-
-a:hover {
-    color: var(--primary-dark);
-    text-decoration: underline;
-}
-
-img, svg, video {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* --------------------------------------------------------------------------
-   * Layout
-   -------------------------------------------------------------------------- */
-header {
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    padding: var(--spacing-md) var(--spacing-xl);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px var(--shadow-color);
-    position: sticky; /* Optional: Keep header visible */
-    top: 0;
-    z-index: calc(var(--z-modal) - 10); /* Below modal */
-}
-
-header h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0;
-}
-
-#current-time {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
-}
-
-main {
-    padding: var(--spacing-lg) var(--spacing-xl);
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-section {
-    background-color: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
-    box-shadow: 0 1px 3px var(--shadow-color);
-    border: var(--border-width) solid var(--border-color);
-}
-
-footer {
-    text-align: center;
-    margin-top: var(--spacing-xl);
-    padding: var(--spacing-lg) var(--spacing-md);
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-    border-top: var(--border-width) solid var(--border-color);
-}
-
-/* --------------------------------------------------------------------------
-   * Typography
-   -------------------------------------------------------------------------- */
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: var(--spacing-md);
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--text-color); /* Default heading color */
-}
-
-h2 {
-    font-size: 1.6rem;
-    color: var(--primary-dark);
-    border-bottom: 2px solid var(--primary-light);
-    padding-bottom: var(--spacing-sm);
-}
-
-h3 {
-    font-size: 1.3rem;
-    color: var(--secondary-dark);
-    margin-bottom: var(--spacing-sm); /* Reduced margin for card titles */
-}
-
-h4 {
-     font-size: 1.1rem;
-     color: var(--info-color);
-     margin-top: var(--spacing-lg);
-     margin-bottom: var(--spacing-sm);
-     border-bottom: 1px solid var(--border-color);
-     padding-bottom: var(--spacing-xs);
-}
-
-p {
-    margin-bottom: var(--spacing-md);
-}
-
-ul, ol {
-    margin-bottom: var(--spacing-md);
-    padding-left: var(--spacing-lg); /* Standard indent */
-}
-
-li {
-    margin-bottom: var(--spacing-sm);
-}
-
-strong {
-    font-weight: 700;
-}
-
-/* --------------------------------------------------------------------------
-   * Dashboard & Status Cards
-   -------------------------------------------------------------------------- */
-.dashboard h2 {
-    margin-bottom: var(--spacing-lg);
-}
-
-.status-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: var(--spacing-lg);
-}
-
-.status-card {
-    background-color: var(--card-bg); /* Ensure contrast with main bg */
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius);
-    border: var(--border-width) solid var(--border-color);
-    box-shadow: 0 1px 2px var(--shadow-color);
-    display: flex;
-    flex-direction: column;
-    transition: box-shadow var(--transition-speed) var(--transition-timing);
-}
-
-.status-card:hover {
-    box-shadow: 0 3px 8px var(--shadow-hover-color);
-}
-
-.status-card h3 {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
-    margin-bottom: var(--spacing-sm);
-}
-
-.status-card h3 .icon {
-    margin-right: var(--spacing-sm);
-    font-size: 1.3em; /* Slightly larger icon */
-    line-height: 1; /* Prevent icon affecting line height */
-}
-
-.last-event, .next-prediction {
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-    margin-bottom: var(--spacing-xs);
-}
-
-.last-event span, .next-prediction span {
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-/* --------------------------------------------------------------------------
-   * Progress Bars
-   -------------------------------------------------------------------------- */
-.progress-bar-container {
-    background-color: #e9ecef; /* Neutral background */
-    border-radius: var(--border-radius); /* Match overall radius */
-    height: 18px; /* Increased height */
-    overflow: hidden;
-    margin: var(--spacing-md) 0;
-    position: relative; /* For potential future labels */
-    border: 1px solid #dee2e6;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%; /* Start at 0 */
-    border-radius: var(--border-radius); /* Match container */
-    transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1), background-color var(--transition-speed) var(--transition-timing); /* Smoother transition */
-    display: flex; /* For potential internal elements */
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-xs);
-    color: var(--text-light);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2); /* Text shadow for readability */
-
-    /* Default: Green / Success */
-    background-color: var(--success-color);
-    background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
-    background-size: 1rem 1rem;
-}
-
-/* Color coding progress bars based on urgency */
-.progress-bar.medium { background-color: var(--warning-color); color: var(--text-color); text-shadow: none;}
-.progress-bar.high { background-color: var(--accent-color); }
-
-/* Specific progress bar styling */
-#diaper-progress-wet { background-color: var(--diaper-wet-color); color: var(--text-color); text-shadow: none; }
-#diaper-progress-dirty { background-color: var(--diaper-dirty-color); }
-#sleep-progress { background-color: var(--info-color); } /* Different color for sleep/awake */
-#pump-progress { background-color: var(--secondary-color); }
-
-/* Active (pulsing) effect when full or nearing full */
-.progress-bar.high,
-.progress-bar[style*="width: 100%"] {
-    animation: pulse-bar 2s infinite ease-in-out;
-}
-
-@keyframes pulse-bar {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
-
-
-/* --------------------------------------------------------------------------
-   * Buttons
-   -------------------------------------------------------------------------- */
-button, .button-like-label {
-    display: inline-block; /* Consistent block model */
-    background-color: var(--primary-color);
-    color: var(--text-light);
-    border: none;
-    padding: var(--spacing-sm) var(--spacing-md); /* Consistent padding */
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    font-family: inherit; /* Ensure font consistency */
-    text-align: center;
-    vertical-align: middle; /* Align with text */
-    transition: background-color var(--transition-speed) var(--transition-timing),
-                box-shadow var(--transition-speed) var(--transition-timing),
-                transform var(--transition-speed) var(--transition-timing);
-    user-select: none; /* Prevent text selection on click */
-}
-
-button:hover, .button-like-label:hover {
-    background-color: var(--primary-dark);
-    box-shadow: 0 2px 5px var(--shadow-hover-color);
-    text-decoration: none; /* Remove underline from label */
-    color: var(--text-light); /* Ensure text color remains */
-}
-
-button:active, .button-like-label:active {
-    transform: translateY(1px); /* Subtle press effect */
-    box-shadow: none;
-}
-
-button:disabled, .button-like-label[disabled] {
-    background-color: var(--text-muted);
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-.quick-action {
-    margin-top: var(--spacing-sm);
-    width: 100%; /* Make quick actions full width in cards */
-}
-
-.status-card .quick-action:first-of-type {
-     margin-top: auto; /* Push first button (or group) to bottom */
-}
-
-/* Specific button variations */
-button.danger, .button-like-label.danger {
-    background-color: var(--accent-color);
-}
-button.danger:hover, .button-like-label.danger:hover {
-    background-color: var(--accent-dark);
-}
-
-button.secondary, .button-like-label.secondary {
-     background-color: var(--secondary-color);
-}
-button.secondary:hover, .button-like-label.secondary:hover {
-     background-color: var(--secondary-dark);
-}
-
-button.outline {
-    background-color: transparent;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-}
-button.outline:hover {
-     background-color: var(--primary-light);
-     color: var(--primary-dark);
-     border-color: var(--primary-dark);
-}
-
-
-#sleep-toggle-button.active {
-    background-color: var(--accent-color); /* Indicate ongoing sleep */
-}
-#sleep-toggle-button.active:hover {
-    background-color: var(--accent-dark);
-}
-
-/* Hide file input */
-input[type="file"] {
-    display: none;
-}
-
-/* --------------------------------------------------------------------------
-   * Modal
-   -------------------------------------------------------------------------- */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    z-index: var(--z-modal);
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.6); /* Darker overlay */
-    animation: fadeIn var(--transition-speed) ease-out;
-}
-
-.modal-content {
-    background-color: var(--modal-bg);
-    margin: 8% auto; /* Adjusted margin for better centering */
-    padding: var(--spacing-lg);
-    border: var(--border-width) solid var(--border-color);
-    width: 90%;
-    max-width: 550px; /* Slightly wider max-width */
-    border-radius: var(--border-radius);
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    animation: slideIn 0.3s ease-out;
-}
-
-.close-button {
-    color: var(--text-muted);
-    position: absolute;
-    top: var(--spacing-sm);
-    right: var(--spacing-md);
-    font-size: 2rem;
-    font-weight: bold;
-    line-height: 1;
-    transition: color var(--transition-speed) var(--transition-timing);
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: var(--accent-dark);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#modal-title {
-    margin-bottom: var(--spacing-lg);
-    color: var(--primary-dark); /* Match section headers */
-    font-size: 1.5rem;
-}
-
-/* --------------------------------------------------------------------------
-   * Forms (Inside Modal & Settings)
-   -------------------------------------------------------------------------- */
-#log-form label, #settings label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 600;
-    font-size: var(--font-size-sm);
-}
-
-#log-form input[type="datetime-local"],
-#log-form input[type="number"],
-#log-form input[type="text"],
-#log-form select,
-#log-form textarea,
-#settings input[type="number"],
-#settings input[type="time"] {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-    border: var(--border-width) solid var(--input-border-color);
-    border-radius: var(--border-radius-sm);
-    box-sizing: border-box;
-    font-size: var(--font-size-base);
-    font-family: inherit;
-    transition: border-color var(--transition-speed) var(--transition-timing),
-                box-shadow var(--transition-speed) var(--transition-timing);
-}
-
-#log-form input:focus,
-#log-form select:focus,
-#log-form textarea:focus,
-#settings input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px var(--primary-light);
-}
-
-#log-form button[type="submit"] {
-    width: 100%;
-    padding: var(--spacing-md);
-    font-size: var(--font-size-base);
-    margin-top: var(--spacing-sm); /* Space above submit button */
-}
-
-/* Radio Button / Checkbox Styling */
-#log-form .radio-group, #settings label[for*="alarm-sound"] {
-    margin-bottom: var(--spacing-md);
-}
-
-#log-form .radio-group fieldset, #settings fieldset { /* Assuming settings might use fieldsets too */
-     border: none;
-     padding: 0;
-     margin: 0;
-}
-
-#log-form .radio-group legend, #settings legend {
-     font-weight: 600;
-     font-size: var(--font-size-sm);
-     margin-bottom: var(--spacing-sm);
-     padding: 0;
-     width: auto; /* Override browser defaults */
-}
-
-#log-form .radio-group div, #settings label[for*="alarm-sound"] { /* Container for input + label */
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--spacing-sm); /* Space between options */
-}
-
-#log-form .radio-group input[type="radio"],
-#settings input[type="checkbox"] {
-     margin-right: var(--spacing-sm);
-     width: auto; /* Override full width */
-     flex-shrink: 0; /* Prevent shrinking */
-     appearance: none; /* Custom styling */
-     -webkit-appearance: none;
-     height: 1.2em;
-     width: 1.2em;
-     border: 2px solid var(--input-border-color);
-     border-radius: 50%; /* Circle for radio */
-     cursor: pointer;
-     position: relative;
-     top: -1px; /* Align better with text */
-     transition: border-color var(--transition-speed) var(--transition-timing), background-color var(--transition-speed) var(--transition-timing);
-}
-#settings input[type="checkbox"] {
-     border-radius: var(--border-radius-sm); /* Square for checkbox */
-}
-
-
-#log-form .radio-group input[type="radio"]:checked,
-#settings input[type="checkbox"]:checked {
-    border-color: var(--primary-color);
-    background-color: var(--primary-color);
-}
-
-/* Custom checkmark/dot */
-#log-form .radio-group input[type="radio"]:checked::after,
-#settings input[type="checkbox"]:checked::after {
-     content: '';
-     display: block;
-     position: absolute;
-     top: 50%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     background-color: white;
-}
-#log-form .radio-group input[type="radio"]:checked::after {
-     width: 0.5em;
-     height: 0.5em;
-     border-radius: 50%;
-}
-#settings input[type="checkbox"]:checked::after {
-    /* Simple checkmark using borders */
-    width: 0.3em;
-    height: 0.6em;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: translate(-50%, -60%) rotate(45deg); /* Adjust position/rotation */
-    background: none; /* No background needed for border checkmark */
-}
-
-
-#log-form .radio-group label, #settings label[for*="alarm-sound"] label { /* Label next to radio/checkbox */
-    margin-bottom: 0;
-    font-weight: normal;
-    cursor: pointer;
-}
-
-/* Specific adjustments for settings inputs */
-#pump-schedule-settings {
-     display: flex;
-     flex-wrap: wrap;
-     align-items: center;
-     gap: var(--spacing-sm) var(--spacing-md);
-}
-#pump-schedule-settings label {
-     margin-bottom: 0; /* Align with inputs */
-}
-#pump-schedule-settings input[type="number"],
-#pump-schedule-settings input[type="time"] {
-    width: auto; /* Don't force full width */
-    max-width: 120px;
-    margin-bottom: 0;
-}
-#pump-schedule-settings button {
-     margin-left: auto; /* Push button to the right if space allows */
-}
-#current-pump-schedule-display {
-     font-style: italic;
-     color: var(--text-muted);
-     width: 100%; /* Take full width on next line */
-     margin-top: var(--spacing-sm);
-}
-
-/* --------------------------------------------------------------------------
-   * Tabs
-   -------------------------------------------------------------------------- */
-.tabs {
-    margin-bottom: var(--spacing-lg);
-    border-bottom: 2px solid var(--border-color);
-    overflow-x: auto; /* Allow horizontal scroll on small screens */
-    white-space: nowrap; /* Prevent tabs wrapping */
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
-}
-
-.tab-link {
-    background: none;
-    border: none;
-    padding: var(--spacing-sm) var(--spacing-md);
-    cursor: pointer;
-    font-size: var(--font-size-base);
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: -2px; /* Overlap container border */
-    border-bottom: 2px solid transparent;
-    transition: color var(--transition-speed) var(--transition-timing), border-color var(--transition-speed) var(--transition-timing);
-    display: inline-block; /* Needed for overflow */
-}
-
-.tab-link:hover {
-    color: var(--primary-dark);
-}
-
-.tab-link.active {
-    color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
-}
-
-.tab-content {
-    display: none;
-    animation: fadeIn 0.5s var(--transition-timing);
-    padding-top: var(--spacing-md); /* Add space below tabs */
-}
-
-.tab-content.active {
-    display: block;
-}
-
-/* --------------------------------------------------------------------------
-   * Event History List
-   -------------------------------------------------------------------------- */
-.filter-controls {
-    margin-bottom: var(--spacing-lg);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm) var(--spacing-md);
-    align-items: center;
-}
-.filter-controls label {
-    font-weight: 600;
-    margin-right: var(--spacing-xs);
-}
-.filter-controls select {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border: 1px solid var(--input-border-color);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--card-bg);
-    font-family: inherit;
-}
-
-#event-list {
-    list-style: none;
-    padding: 0;
-    max-height: 60vh; /* Limit height and enable scroll */
-    overflow-y: auto;
-    border: 1px solid var(--border-color); /* Add border around list */
-    border-radius: var(--border-radius-sm);
-}
-
-#event-list li {
-    background-color: var(--card-bg); /* Use card bg for items */
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin-bottom: 0; /* Remove margin, use border */
-    border-bottom: 1px solid var(--border-color); /* Separator */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: var(--font-size-sm);
-    transition: background-color var(--transition-speed) var(--transition-timing);
-}
-
-#event-list li:last-child {
-    border-bottom: none;
-}
-
-#event-list li:hover {
-    background-color: var(--bg-color); /* Subtle hover */
-}
-
-#event-list .event-time {
-    font-weight: 600;
-    color: var(--text-muted);
-    min-width: 150px; /* Ensure consistent width */
-    flex-shrink: 0; /* Prevent shrinking */
-}
-
-#event-list .event-details {
-    flex-grow: 1;
-    margin: 0 var(--spacing-md);
-    color: var(--text-color); /* Ensure details text is clear */
-}
-
-#event-list .event-actions {
-    display: flex;
-    gap: var(--spacing-sm);
-    flex-shrink: 0; /* Prevent shrinking */
-}
-
-#event-list .event-actions button {
-    background: none;
-    border: none;
-    color: var(--primary-color);
-    cursor: pointer;
-    padding: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    transition: color var(--transition-speed) var(--transition-timing);
-}
-
-#event-list .event-actions button:hover {
-    color: var(--primary-dark);
-    text-decoration: underline;
-}
-
-#event-list .event-actions button.delete {
-    color: var(--accent-color);
-}
-#event-list .event-actions button.delete:hover {
-    color: var(--accent-dark);
-}
-
-/* --------------------------------------------------------------------------
-   * Charts
-   -------------------------------------------------------------------------- */
-.chart-container {
-    margin-top: var(--spacing-lg);
-    position: relative; /* Needed for Chart.js responsiveness */
-    min-height: 300px; /* Ensure minimum height */
-    max-width: 100%;
-}
-
-#chart-type {
-    margin-bottom: var(--spacing-lg);
-    padding: var(--spacing-sm);
-    border: 1px solid var(--input-border-color);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--card-bg);
-    font-family: inherit;
-}
-
-/* Canvas element itself */
-#main-chart {
-    display: block;
-    width: 100% !important; /* Override inline styles if necessary */
-    height: auto !important;
-}
-
-/* --------------------------------------------------------------------------
-   * Reports
-   -------------------------------------------------------------------------- */
-#report-content ul {
-    list-style: disc; /* Default list style */
-    margin-left: var(--spacing-lg);
-}
-#report-content h4 {
-    color: var(--secondary-dark); /* Distinct color for report subheadings */
-}
-#daily-summary li, #24h-projection li {
-     font-size: var(--font-size-sm);
-     color: var(--text-muted);
-}
-#daily-summary li strong, #24h-projection li strong {
-     color: var(--text-color);
-     margin-right: var(--spacing-xs);
-}
-
-/* --------------------------------------------------------------------------
-   * Settings
-   -------------------------------------------------------------------------- */
-#settings h4 {
-     color: var(--info-color); /* Use info color for settings headers */
-}
-#settings button, #settings .button-like-label {
-    margin-right: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
-}
-#settings p {
-    margin: var(--spacing-sm) 0;
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-}
-#settings label[for*="alarm-sound"] { /* Style checkbox label */
-     display: flex;
-     align-items: center;
-     cursor: pointer;
-     margin-bottom: var(--spacing-md);
-}
-#settings label[for*="alarm-sound"] input {
-     margin-right: var(--spacing-sm);
-}
-
-/* --------------------------------------------------------------------------
-   * Alarm Notification
-   -------------------------------------------------------------------------- */
-.alarm {
-    display: none; /* Hidden by default */
-    position: fixed;
-    bottom: var(--spacing-lg);
-    right: var(--spacing-lg);
-    background-color: var(--accent-color);
-    color: var(--text-light);
-    padding: var(--spacing-md) var(--spacing-lg);
-    border-radius: var(--border-radius);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow */
-    z-index: var(--z-alarm);
-    max-width: 350px;
-    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy slide */
-}
-
-.alarm-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-#alarm-message {
-    font-size: var(--font-size-base); /* Slightly smaller */
-    font-weight: 600;
-    margin-bottom: var(--spacing-sm);
-}
-
-.snooze-options {
-    margin-bottom: var(--spacing-sm);
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping on small alarm box */
-    gap: var(--spacing-xs);
-    align-items: center;
-}
-
-.snooze-options span {
-    margin-right: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-.snooze-options button,
-#dismiss-alarm, #resume-alarms, #force-resume-alarms {
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: var(--text-light);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin: 0; /* Remove default button margins */
-    font-size: var(--font-size-xs);
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    transition: background-color var(--transition-speed) var(--transition-timing);
-    flex-shrink: 0; /* Prevent buttons shrinking weirdly */
-}
-
-.snooze-options button:hover,
-#dismiss-alarm:hover, #resume-alarms:hover, #force-resume-alarms:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-    border-color: rgba(255, 255, 255, 0.8);
-}
-
-#dismiss-alarm {
-    background-color: var(--primary-dark); /* Make dismiss stand out slightly */
-    border: none;
-    margin-left: auto; /* Push dismiss to the right */
-    margin-top: var(--spacing-sm); /* Space above dismiss */
-}
-
-#resume-alarms, #force-resume-alarms {
-     background-color: var(--success-color);
-     border: none;
-}
-
-
-/* --------------------------------------------------------------------------
-   * Animations
-   -------------------------------------------------------------------------- */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideIn {
-    from { transform: translateY(-30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideUp {
-     from { transform: translateY(40px); opacity: 0; }
-     to { transform: translateY(0); opacity: 1; }
-}
-
-/* --------------------------------------------------------------------------
-   * Responsive Design
-   -------------------------------------------------------------------------- */
-@media (max-width: 992px) {
-     main {
-         padding: var(--spacing-lg) var(--spacing-md);
-     }
-     header {
-         padding: var(--spacing-md);
-     }
-}
-
-@media (max-width: 768px) {
-    html {
-        font-size: 95%; /* Slightly smaller base font */
-    }
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: var(--spacing-sm) var(--spacing-md);
-    }
-    header h1 {
-        font-size: 1.5rem;
-        margin-bottom: var(--spacing-xs);
-    }
-    #current-time {
-        align-self: flex-end; /* Move time back to right */
-    }
-    main {
-        padding: var(--spacing-md) var(--spacing-sm);
-    }
-    .status-grid {
-        grid-template-columns: 1fr; /* Stack cards */
-        gap: var(--spacing-md);
-    }
-    .modal-content {
-        width: 95%;
-        margin: 5% auto;
-        padding: var(--spacing-md);
-    }
-    .tabs {
-        padding-bottom: var(--spacing-xs); /* Add padding for scrollbar */
-    }
-    #event-list li {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-xs);
-    }
-    #event-list .event-time {
-        min-width: auto; /* Allow time to wrap */
-        font-size: var(--font-size-xs);
-    }
-    #event-list .event-details {
-        margin: 0; /* Remove horizontal margins */
-    }
-    #event-list .event-actions {
-        margin-top: var(--spacing-sm);
-        align-self: flex-end;
-    }
-    .alarm {
-        bottom: var(--spacing-sm);
-        left: var(--spacing-sm);
+   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap');
+
+   :root {
+       /* Color Palette (Soft & Calming) */
+       --primary-color: #6ECDCF; /* Soft Teal */
+       --primary-dark: #5aa6a8;
+       --primary-light: #a7e0e1;
+       --secondary-color: #F8B195; /* Soft Peach */
+       --secondary-dark: #f6a081;
+       --accent-color: #F67280; /* Soft Coral */
+       --accent-dark: #e85f6d;
+       --success-color: #97C1A9; /* Soft Green */
+       --warning-color: #FAD02E; /* Soft Yellow */
+       --info-color: #AEC6CF; /* Soft Blue/Grey */
+       --help-color: var(--info-color); /* Color for help elements */
+       --help-dark: #98b1bb;
+       --diaper-wet-color: var(--warning-color);
+       --diaper-dirty-color: #A0522D; /* Sienna Brown */
+       --diaper-mixed-color: #C19A6B; /* Camel */
+   
+       /* Greys & Backgrounds */
+       --bg-color: #F7F9FC; /* Very light blue/grey */
+       --card-bg: #FFFFFF;
+       --modal-bg: #FFFFFF;
+       --border-color: #E0E6ED;
+       --input-border-color: #CED4DA;
+       --text-color: #343A40;
+       --text-muted: #6C757D;
+       --text-light: #F8F9FA;
+       --shadow-color: rgba(0, 0, 0, 0.06); /* Slightly softer shadow */
+       --shadow-hover-color: rgba(0, 0, 0, 0.1);
+       --shadow-strong-color: rgba(0, 0, 0, 0.15);
+   
+       /* Typography */
+       --font-family: 'Nunito', sans-serif;
+       --font-size-base: 1rem; /* Typically 16px */
+       --font-size-lg: 1.2rem;
+       --font-size-sm: 0.9rem;
+       --font-size-xs: 0.8rem;
+       --line-height-base: 1.6;
+       --line-height-heading: 1.3;
+   
+       /* Spacing */
+       --spacing-xs: 0.25rem;
+       --spacing-sm: 0.5rem;
+       --spacing-md: 1rem;
+       --spacing-lg: 1.5rem;
+       --spacing-xl: 2rem;
+   
+       /* Borders & Radius */
+       --border-radius: 8px;
+       --border-radius-sm: 4px;
+       --border-width: 1px;
+   
+       /* Transitions */
+       --transition-speed: 0.2s;
+       --transition-timing: ease-in-out;
+   
+       /* Z-Indexes */
+       --z-guidance: 500;
+       --z-modal: 1000;
+       --z-alarm: 2000;
+       --z-help-modal: 1050; /* Ensure help modal is above log modal */
+   }
+   
+   *,
+   *::before,
+   *::after {
+       box-sizing: border-box;
+       margin: 0;
+       padding: 0;
+   }
+   
+   html {
+       font-size: var(--font-size-base);
+       scroll-behavior: smooth;
+       -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+   }
+   
+   body {
+       font-family: var(--font-family);
+       line-height: var(--line-height-base);
+       background-color: var(--bg-color);
+       color: var(--text-color);
+       -webkit-font-smoothing: antialiased;
+       -moz-osx-font-smoothing: grayscale;
+   }
+   
+   a {
+       color: var(--primary-color);
+       text-decoration: none;
+       transition: color var(--transition-speed) var(--transition-timing);
+   }
+   
+   a:hover {
+       color: var(--primary-dark);
+       text-decoration: underline;
+   }
+   
+   img, svg, video {
+       max-width: 100%;
+       height: auto;
+       display: block;
+   }
+   
+   /* Basic Focus Outline for Accessibility */
+   :focus-visible {
+       outline: 2px solid var(--primary-dark);
+       outline-offset: 2px;
+       border-radius: var(--border-radius-sm); /* Match element radius if possible */
+   }
+   /* Remove default outline when :focus-visible is supported */
+   *:focus:not(:focus-visible) {
+       outline: none;
+   }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Layout & Structure Helpers
+      -------------------------------------------------------------------------- */
+   header {
+       background-color: var(--primary-color);
+       color: var(--text-light);
+       padding: var(--spacing-md) var(--spacing-xl);
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       box-shadow: 0 2px 5px var(--shadow-color);
+       position: sticky;
+       top: 0;
+       z-index: calc(var(--z-modal) - 10); /* Below modals */
+   }
+   
+   header h1 {
+       font-size: 1.75rem;
+       font-weight: 700;
+       margin: 0;
+   }
+   
+   #current-time {
+       font-size: var(--font-size-sm);
+       font-weight: 600;
+       background-color: rgba(255, 255, 255, 0.1);
+       padding: var(--spacing-xs) var(--spacing-sm);
+       border-radius: var(--border-radius-sm);
+       min-width: 150px; /* Prevent jumpiness */
+       text-align: right;
+   }
+   
+   main {
+       padding: var(--spacing-lg) var(--spacing-xl);
+       max-width: 1200px;
+       margin: 0 auto;
+   }
+   
+   section {
+       background-color: var(--card-bg);
+       border-radius: var(--border-radius);
+       padding: var(--spacing-lg);
+       margin-bottom: var(--spacing-xl);
+       box-shadow: 0 1px 3px var(--shadow-color);
+       border: var(--border-width) solid var(--border-color);
+   }
+   
+   /* Header for sections with help button */
+   .section-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: var(--spacing-lg); /* Space below header */
+       border-bottom: 2px solid var(--primary-light);
+       padding-bottom: var(--spacing-sm);
+   }
+   .section-header h2 {
+       border-bottom: none; /* Remove double border */
+       padding-bottom: 0;
+       margin-bottom: 0; /* Reset margin */
+   }
+   /* For inline headers within tab content */
+   .section-header-inline {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: var(--spacing-md); /* Space below header */
+   }
+   .section-header-inline h3,
+   .section-header-inline h4 {
+       margin-bottom: 0;
+   }
+   
+   footer {
+       text-align: center;
+       margin-top: var(--spacing-xl);
+       padding: var(--spacing-lg) var(--spacing-md);
+       font-size: var(--font-size-sm);
+       color: var(--text-muted);
+       border-top: var(--border-width) solid var(--border-color);
+   }
+   
+   /* --------------------------------------------------------------------------
+      * Typography
+      -------------------------------------------------------------------------- */
+   h1, h2, h3, h4, h5, h6 {
+       margin-top: 0;
+       margin-bottom: var(--spacing-md);
+       font-weight: 600;
+       line-height: var(--line-height-heading);
+       color: var(--text-color);
+   }
+   h2 { font-size: 1.6rem; color: var(--primary-dark); }
+   h3 { font-size: 1.3rem; color: var(--secondary-dark); }
+   h4 { font-size: 1.1rem; color: var(--info-color); margin-top: var(--spacing-lg); border-bottom: 1px solid var(--border-color); padding-bottom: var(--spacing-xs); }
+   p { margin-bottom: var(--spacing-md); }
+   ul, ol { margin-bottom: var(--spacing-md); padding-left: var(--spacing-lg); }
+   li { margin-bottom: var(--spacing-sm); }
+   strong { font-weight: 700; }
+   small { font-size: var(--font-size-xs); }
+   .text-muted { color: var(--text-muted); }
+   .empty-list-item {
+       padding: var(--spacing-md);
+       text-align: center;
+       color: var(--text-muted);
+       font-style: italic;
+       background-color: var(--bg-color);
+       border-radius: var(--border-radius-sm);
+   }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Guidance Banner
+      -------------------------------------------------------------------------- */
+   .guidance-banner {
+       background-color: var(--info-color);
+       color: var(--text-light);
+       padding: var(--spacing-md);
+       border-radius: var(--border-radius-sm);
+       margin: 0 0 var(--spacing-lg) 0; /* Top margin removed, bottom space added */
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       font-size: var(--font-size-sm);
+       box-shadow: 0 2px 4px var(--shadow-color);
+       animation: fadeIn 0.5s ease-out;
+       z-index: var(--z-guidance);
+   }
+   
+   .dismiss-guidance {
+       background: none;
+       border: none;
+       color: var(--text-light);
+       font-size: 1.5rem;
+       font-weight: bold;
+       line-height: 1;
+       cursor: pointer;
+       padding: 0 var(--spacing-sm);
+       margin-left: var(--spacing-md);
+       opacity: 0.7;
+       transition: opacity var(--transition-speed) var(--transition-timing);
+   }
+   
+   .dismiss-guidance:hover {
+       opacity: 1;
+   }
+   
+   /* --------------------------------------------------------------------------
+      * Help Buttons
+      -------------------------------------------------------------------------- */
+   .help-btn {
+       display: inline-flex; /* Use flex for centering content */
+       justify-content: center;
+       align-items: center;
+       width: 24px;
+       height: 24px;
+       background-color: var(--help-color);
+       color: var(--text-light);
+       border: none;
+       border-radius: 50%; /* Circular */
+       font-size: var(--font-size-sm);
+       font-weight: bold;
+       line-height: 1;
+       cursor: pointer;
+       padding: 0;
+       margin-left: var(--spacing-sm);
+       flex-shrink: 0; /* Prevent shrinking in flex layouts */
+       transition: background-color var(--transition-speed) var(--transition-timing),
+                   transform var(--transition-speed) var(--transition-timing);
+       box-shadow: 0 1px 2px var(--shadow-color);
+       user-select: none;
+   }
+   
+   .help-btn:hover, .help-btn:focus-visible {
+       background-color: var(--help-dark);
+       transform: scale(1.1);
+       box-shadow: 0 2px 4px var(--shadow-hover-color);
+   }
+   
+   /* Variations for different placements */
+   .help-btn-inline { /* For use next to text/inputs */
+       margin-left: var(--spacing-xs);
+       vertical-align: middle; /* Align with text */
+       transform: translateY(-1px); /* Adjust vertical alignment slightly */
+   }
+   .help-btn-inline:hover { transform: translateY(-1px) scale(1.1); } /* Maintain transform */
+   
+   .help-btn-modal { /* Position inside modal header */
+       position: absolute;
+       top: var(--spacing-lg);
+       right: 40px; /* Space from close button */
+       margin: 0;
+   }
+   
+   .help-btn-alarm { /* Position inside alarm */
+        position: absolute;
+        top: var(--spacing-sm);
         right: var(--spacing-sm);
-        width: auto; /* Full width minus padding */
-        max-width: none;
-    }
-    #pump-schedule-settings button {
-         margin-left: 0; /* Allow button to wrap normally */
-         width: 100%; /* Full width button on mobile */
-         margin-top: var(--spacing-sm);
-    }
-    .filter-controls {
-         flex-direction: column;
-         align-items: stretch;
-    }
-    .filter-controls select {
-         width: 100%; /* Full width filters */
-    }
-}
-
-@media (max-width: 480px) {
-    html {
-        font-size: 90%;
-    }
-    header h1 {
-        font-size: 1.3rem;
-    }
-    h2 {
-         font-size: 1.4rem;
-    }
-     h3 {
-         font-size: 1.1rem;
-    }
-    .status-card {
-         padding: var(--spacing-sm);
-    }
-     .snooze-options {
-          font-size: var(--font-size-xs); /* Ensure snooze buttons remain usable */
-     }
-     .snooze-options button {
-          padding: 3px 6px; /* Slightly smaller padding */
-     }
-}
+        background-color: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        width: 20px;
+        height: 20px;
+        font-size: var(--font-size-xs);
+   }
+   .help-btn-alarm:hover {
+        background-color: rgba(255, 255, 255, 0.4);
+        border-color: rgba(255, 255, 255, 0.8);
+   }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Dashboard & Status Cards
+      -------------------------------------------------------------------------- */
+   .dashboard h2 { margin-bottom: 0; } /* Handled by .section-header */
+   
+   .status-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+       gap: var(--spacing-lg);
+   }
+   
+   .status-card {
+       background-color: var(--card-bg);
+       padding: var(--spacing-md);
+       border-radius: var(--border-radius);
+       border: var(--border-width) solid var(--border-color);
+       box-shadow: 0 1px 2px var(--shadow-color);
+       display: flex;
+       flex-direction: column;
+       transition: box-shadow var(--transition-speed) var(--transition-timing);
+   }
+   .status-card:hover { box-shadow: 0 3px 8px var(--shadow-hover-color); }
+   .status-card h3 { display: flex; align-items: center; font-size: 1.2rem; margin-bottom: var(--spacing-sm); }
+   .status-card h3 .icon { margin-right: var(--spacing-sm); font-size: 1.3em; line-height: 1; }
+   .last-event, .next-prediction { font-size: var(--font-size-sm); color: var(--text-muted); margin-bottom: var(--spacing-xs); display: flex; justify-content: space-between; align-items: center; }
+   .last-event span, .next-prediction span:first-child { font-weight: 600; color: var(--text-color); margin-left: var(--spacing-xs); } /* Style the value span */
+   
+   /* Prediction Confidence Indicator */
+   .prediction-confidence {
+       font-size: var(--font-size-xs);
+       font-weight: bold;
+       color: var(--success-color); /* Green for confidence */
+       padding: 0 var(--spacing-xs);
+       cursor: help; /* Indicate tooltip */
+       margin-left: var(--spacing-xs);
+   }
+   .prediction-confidence:empty { display: none; } /* Hide if empty */
+   /* Style for low confidence '?' */
+   .prediction-confidence:not(:empty):not(:contains('✓')) {
+       color: var(--warning-color);
+   }
+   /* Helper pseudo-selector (might not work everywhere, JS sets text directly) */
+   :is(.prediction-confidence:contains('?')) {
+       color: var(--warning-color);
+   }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Progress Bars with Labels
+      -------------------------------------------------------------------------- */
+   .progress-bar-container {
+       background-color: #e9ecef;
+       border-radius: var(--border-radius);
+       height: 20px; /* Slightly taller for label */
+       overflow: hidden;
+       margin: var(--spacing-sm) 0; /* Reduced vertical margin */
+       position: relative;
+       border: 1px solid #dee2e6;
+   }
+   
+   .progress-bar {
+       height: 100%;
+       width: 0%;
+       border-radius: var(--border-radius);
+       transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1), background-color var(--transition-speed) var(--transition-timing);
+       display: flex;
+       align-items: center;
+       justify-content: center; /* Center the label */
+       overflow: hidden; /* Prevent label overflow */
+   
+       /* Default: Green / Success */
+       background-color: var(--success-color);
+       background-image: linear-gradient(45deg, rgba(255, 255, 255, .15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .15) 50%, rgba(255, 255, 255, .15) 75%, transparent 75%, transparent);
+       background-size: 1rem 1rem;
+   }
+   
+   /* Progress Bar Label */
+   .progress-bar-label {
+       font-size: var(--font-size-xs);
+       font-weight: 600;
+       color: var(--text-light);
+       text-shadow: 1px 1px 1px rgba(0,0,0,0.3); /* Enhance readability */
+       white-space: nowrap;
+       padding: 0 var(--spacing-xs);
+   }
+   
+   /* Color coding progress bars based on urgency */
+   .progress-bar.medium { background-color: var(--warning-color); }
+   .progress-bar.high { background-color: var(--accent-color); }
+   
+   /* Adjust label color for better contrast on certain backgrounds */
+   .progress-bar.medium .progress-bar-label,
+   #diaper-progress-wet .progress-bar-label { /* Wet uses warning color */
+       color: var(--text-color);
+       text-shadow: none;
+   }
+   
+   /* Specific progress bar backgrounds */
+   #diaper-progress-wet { background-color: var(--diaper-wet-color); }
+   #diaper-progress-dirty { background-color: var(--diaper-dirty-color); }
+   #sleep-progress { background-color: var(--info-color); }
+   #pump-progress { background-color: var(--secondary-color); }
+   
+   /* Style for active state (e.g., sleeping) */
+   .progress-bar.active-state {
+       background-color: var(--info-color); /* Consistent color for active sleep */
+       /* Optional: Add subtle animation for active state */
+       /* animation: pulse-active 2s infinite ease-in-out; */
+   }
+   
+   /* Active/Pulsing effect when near/at 100% */
+   .progress-bar.high,
+   .progress-bar[style*="width: 100%"]:not(.active-state) { /* Don't pulse active sleep bar */
+       animation: pulse-bar 2s infinite ease-in-out;
+   }
+   @keyframes pulse-bar { 0% { opacity: 1; } 50% { opacity: 0.85; } 100% { opacity: 1; } }
+   /* @keyframes pulse-active { 0% { filter: brightness(1); } 50% { filter: brightness(0.95); } 100% { filter: brightness(1); } } */
+   
+   
+   /* --------------------------------------------------------------------------
+      * Buttons & Button Groups
+      -------------------------------------------------------------------------- */
+   button, .button-like-label { /* Base Button Styles */ display: inline-block; background-color: var(--primary-color); color: var(--text-light); border: none; padding: var(--spacing-sm) var(--spacing-md); border-radius: var(--border-radius-sm); cursor: pointer; font-size: var(--font-size-sm); font-weight: 600; font-family: inherit; text-align: center; vertical-align: middle; transition: background-color var(--transition-speed) var(--transition-timing), box-shadow var(--transition-speed) var(--transition-timing), transform var(--transition-speed) var(--transition-timing); user-select: none; }
+   button:hover, .button-like-label:hover { background-color: var(--primary-dark); box-shadow: 0 2px 5px var(--shadow-hover-color); text-decoration: none; color: var(--text-light); }
+   button:active, .button-like-label:active { transform: translateY(1px); box-shadow: none; }
+   button:disabled, .button-like-label[disabled] { background-color: var(--text-muted); cursor: not-allowed; opacity: 0.7; box-shadow: none; transform: none; }
+   
+   .quick-action { margin-top: var(--spacing-sm); width: 100%; } /* Full width in cards */
+   .status-card .button-group, .status-card .quick-action:first-of-type { margin-top: auto; } /* Push buttons to bottom */
+   
+   /* Button Group */
+   .button-group {
+       display: flex;
+       gap: var(--spacing-sm);
+       margin-top: auto; /* Push to bottom */
+   }
+   .button-group .quick-action {
+       width: auto; /* Override full width */
+       flex-grow: 1; /* Distribute space */
+       margin-top: 0; /* Remove top margin */
+   }
+   .button-group .quick-action.small { /* For smaller secondary buttons */
+        flex-grow: 0;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-xs);
+   }
+   
+   /* Variations */
+   button.danger, .button-like-label.danger { background-color: var(--accent-color); }
+   button.danger:hover, .button-like-label.danger:hover { background-color: var(--accent-dark); }
+   button.secondary, .button-like-label.secondary { background-color: var(--secondary-color); }
+   button.secondary:hover, .button-like-label.secondary:hover { background-color: var(--secondary-dark); }
+   button.outline { background-color: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); }
+   button.outline:hover { background-color: var(--primary-light); color: var(--primary-dark); border-color: var(--primary-dark); }
+   
+   #sleep-toggle-button.active { background-color: var(--accent-color); } /* Danger color for 'End Sleep' */
+   #sleep-toggle-button.active:hover { background-color: var(--accent-dark); }
+   
+   /* Hide file input visually but keep accessible */
+   input[type="file"] { border: 0; clip: rect(0, 0, 0, 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Modals (Log & Help)
+      -------------------------------------------------------------------------- */
+   .modal { display: none; position: fixed; z-index: var(--z-modal); left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); animation: fadeIn var(--transition-speed) ease-out; }
+   .modal-content { background-color: var(--modal-bg); margin: 8% auto; padding: var(--spacing-lg); border: var(--border-width) solid var(--border-color); width: 90%; max-width: 550px; border-radius: var(--border-radius); position: relative; box-shadow: 0 5px 15px var(--shadow-strong-color); animation: slideIn 0.3s ease-out; }
+   .close-button { color: var(--text-muted); position: absolute; top: var(--spacing-sm); right: var(--spacing-md); font-size: 2rem; font-weight: bold; line-height: 1; transition: color var(--transition-speed) var(--transition-timing); background: none; border: none; padding: 0 var(--spacing-xs); cursor: pointer; }
+   .close-button:hover, .close-button:focus-visible { color: var(--accent-dark); text-decoration: none; }
+   #modal-title { margin-bottom: var(--spacing-lg); color: var(--primary-dark); font-size: 1.5rem; padding-right: 60px; /* Space for help/close buttons */ }
+   
+   /* Help Modal Specifics */
+   .help-modal { z-index: var(--z-help-modal); }
+   #help-modal-content { max-height: 60vh; overflow-y: auto; } /* Scroll long help text */
+   #help-modal-content h3 { color: var(--secondary-dark); font-size: 1.2rem; margin-top: var(--spacing-md); }
+   #help-modal-content h3:first-child { margin-top: 0; }
+   #help-modal-content ul { list-style: disc; }
+   #help-modal-content li { margin-bottom: var(--spacing-xs); }
+   #help-modal-content strong { color: var(--primary-dark); }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Forms (Inside Modal & Settings)
+      -------------------------------------------------------------------------- */
+   #log-form label, #settings label { display: block; margin-bottom: var(--spacing-xs); font-weight: 600; font-size: var(--font-size-sm); }
+   #log-form input[type="datetime-local"], #log-form input[type="number"], #log-form input[type="text"], #log-form select, #log-form textarea, #settings input[type="number"], #settings input[type="time"] { width: 100%; padding: var(--spacing-sm) var(--spacing-md); margin-bottom: var(--spacing-md); border: var(--border-width) solid var(--input-border-color); border-radius: var(--border-radius-sm); box-sizing: border-box; font-size: var(--font-size-base); font-family: inherit; transition: border-color var(--transition-speed) var(--transition-timing), box-shadow var(--transition-speed) var(--transition-timing); background-color: var(--card-bg); color: var(--text-color); }
+   #log-form input:focus, #log-form select:focus, #log-form textarea:focus, #settings input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 2px var(--primary-light); }
+   #log-form input::placeholder, #log-form textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
+   #log-form button[type="submit"] { width: 100%; padding: var(--spacing-md); font-size: var(--font-size-base); margin-top: var(--spacing-sm); }
+   
+   /* Radio/Checkbox Styling */
+   #log-form .radio-group, #settings label[for*="alarm-sound"] { margin-bottom: var(--spacing-md); }
+   #log-form .radio-group fieldset, #settings fieldset { border: none; padding: 0; margin: 0; }
+   #log-form .radio-group legend, #settings legend { font-weight: 600; font-size: var(--font-size-sm); margin-bottom: var(--spacing-sm); padding: 0; width: auto; }
+   #log-form .radio-group div, #settings label[for*="alarm-sound"] { display: flex; align-items: center; margin-bottom: var(--spacing-sm); }
+   #log-form .radio-group input[type="radio"], #settings input[type="checkbox"] { margin-right: var(--spacing-sm); width: auto; flex-shrink: 0; appearance: none; -webkit-appearance: none; height: 1.2em; width: 1.2em; border: 2px solid var(--input-border-color); border-radius: 50%; cursor: pointer; position: relative; top: -1px; transition: border-color var(--transition-speed) var(--transition-timing), background-color var(--transition-speed) var(--transition-timing); }
+   #settings input[type="checkbox"] { border-radius: var(--border-radius-sm); }
+   #log-form .radio-group input[type="radio"]:checked, #settings input[type="checkbox"]:checked { border-color: var(--primary-color); background-color: var(--primary-color); }
+   #log-form .radio-group input[type="radio"]:checked::after, #settings input[type="checkbox"]:checked::after { content: ''; display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; }
+   #log-form .radio-group input[type="radio"]:checked::after { width: 0.5em; height: 0.5em; border-radius: 50%; }
+   #settings input[type="checkbox"]:checked::after { width: 0.3em; height: 0.6em; border: solid white; border-width: 0 2px 2px 0; transform: translate(-50%, -60%) rotate(45deg); background: none; }
+   #log-form .radio-group label, #settings label[for*="alarm-sound"] label { margin-bottom: 0; font-weight: normal; cursor: pointer; padding-left: var(--spacing-xs); }
+   
+   /* Settings Specific Form Styles */
+   #pump-schedule-settings { display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-sm) var(--spacing-md); margin-bottom: var(--spacing-sm); }
+   #pump-schedule-settings label { margin-bottom: 0; }
+   #pump-schedule-settings input[type="number"], #pump-schedule-settings input[type="time"] { width: auto; max-width: 120px; margin-bottom: 0; }
+   #pump-schedule-settings button { margin-left: auto; }
+   #current-pump-schedule-display { font-style: italic; color: var(--text-muted); width: 100%; margin-top: var(--spacing-xs); }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Tabs
+      -------------------------------------------------------------------------- */
+   .tabs { margin-bottom: var(--spacing-lg); border-bottom: 2px solid var(--border-color); overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+   .tab-link { background: none; border: none; padding: var(--spacing-sm) var(--spacing-md); cursor: pointer; font-size: var(--font-size-base); font-weight: 600; color: var(--text-muted); margin-bottom: -2px; border-bottom: 2px solid transparent; transition: color var(--transition-speed) var(--transition-timing), border-color var(--transition-speed) var(--transition-timing); display: inline-block; }
+   .tab-link:hover { color: var(--primary-dark); }
+   .tab-link.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+   .tab-content { display: none; animation: fadeIn 0.5s var(--transition-timing); padding-top: var(--spacing-md); }
+   .tab-content.active { display: block; }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Event History List
+      -------------------------------------------------------------------------- */
+   .filter-controls { margin-bottom: var(--spacing-lg); display: flex; flex-wrap: wrap; gap: var(--spacing-sm) var(--spacing-md); align-items: center; }
+   .filter-controls label { font-weight: 600; margin-right: var(--spacing-xs); }
+   .filter-controls select { padding: var(--spacing-xs) var(--spacing-sm); border: 1px solid var(--input-border-color); border-radius: var(--border-radius-sm); background-color: var(--card-bg); font-family: inherit; }
+   
+   #event-list { list-style: none; padding: 0; max-height: 60vh; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); background-color: var(--card-bg); /* Ensure bg for empty state */ }
+   #event-list li { background-color: transparent; /* Items transparent, container has bg */ padding: var(--spacing-sm) var(--spacing-md); margin-bottom: 0; border-bottom: 1px solid var(--border-color); display: flex; flex-wrap: wrap; /* Allow wrapping on small screens */ justify-content: space-between; align-items: center; font-size: var(--font-size-sm); transition: background-color var(--transition-speed) var(--transition-timing); gap: var(--spacing-sm); /* Gap between elements when wrapping */ }
+   #event-list li:last-child { border-bottom: none; }
+   #event-list li:hover { background-color: var(--bg-color); }
+   #event-list .event-time { font-weight: 600; color: var(--text-muted); min-width: 150px; flex-shrink: 0; }
+   #event-list .event-details { flex-grow: 1; margin: 0; /* Remove horizontal margins */ color: var(--text-color); }
+   #event-list .event-notes { color: var(--text-muted); font-size: var(--font-size-xs); display: inline; /* Keep notes inline */ }
+   #event-list .event-actions { display: flex; gap: var(--spacing-sm); flex-shrink: 0; margin-left: auto; /* Push actions right */ }
+   #event-list .event-actions button { background: none; border: none; color: var(--primary-color); cursor: pointer; padding: var(--spacing-xs); font-size: var(--font-size-xs); font-weight: 600; transition: color var(--transition-speed) var(--transition-timing); }
+   #event-list .event-actions button:hover { color: var(--primary-dark); text-decoration: underline; }
+   #event-list .event-actions button.delete { color: var(--accent-color); }
+   #event-list .event-actions button.delete:hover { color: var(--accent-dark); }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Charts
+      -------------------------------------------------------------------------- */
+   .chart-controls { margin-bottom: var(--spacing-lg); }
+   .chart-controls label { font-weight: 600; margin-right: var(--spacing-sm); }
+   .chart-controls select { padding: var(--spacing-sm); border: 1px solid var(--input-border-color); border-radius: var(--border-radius-sm); background-color: var(--card-bg); font-family: inherit; }
+   .chart-container { position: relative; min-height: 300px; max-width: 100%; }
+   #main-chart { display: block; width: 100% !important; height: auto !important; }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Reports
+      -------------------------------------------------------------------------- */
+   #report-content ul { list-style: disc; margin-left: var(--spacing-lg); }
+   #report-content h4 { color: var(--secondary-dark); }
+   #daily-summary li, #24h-projection li { font-size: var(--font-size-sm); color: var(--text-muted); }
+   #daily-summary li strong, #24h-projection li strong { color: var(--text-color); margin-right: var(--spacing-xs); }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Settings
+      -------------------------------------------------------------------------- */
+   #settings h4 { color: var(--info-color); }
+   #settings button, #settings .button-like-label { margin-right: var(--spacing-sm); margin-bottom: var(--spacing-sm); }
+   #settings p { margin: var(--spacing-sm) 0; font-size: var(--font-size-sm); color: var(--text-muted); }
+   #settings label[for*="alarm-sound"] { display: flex; align-items: center; cursor: pointer; margin-bottom: var(--spacing-md); }
+   #settings label[for*="alarm-sound"] input { margin-right: var(--spacing-sm); }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Alarm Notification
+      -------------------------------------------------------------------------- */
+   .alarm { display: none; position: fixed; bottom: var(--spacing-lg); right: var(--spacing-lg); background-color: var(--accent-color); color: var(--text-light); padding: var(--spacing-md) var(--spacing-lg); border-radius: var(--border-radius); box-shadow: 0 5px 15px var(--shadow-strong-color); z-index: var(--z-alarm); max-width: 350px; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+   .alarm-content { position: relative; /* For positioning help button */ display: flex; flex-direction: column; align-items: flex-start; }
+   #alarm-message { font-size: var(--font-size-base); font-weight: 600; margin-bottom: var(--spacing-sm); padding-right: 25px; /* Space for help button */ }
+   .snooze-options { margin-bottom: var(--spacing-sm); display: flex; flex-wrap: wrap; gap: var(--spacing-xs); align-items: center; }
+   .snooze-options span { margin-right: var(--spacing-xs); font-size: var(--font-size-xs); font-weight: 600; opacity: 0.9; }
+   .snooze-options button, #dismiss-alarm, #resume-alarms, #force-resume-alarms { background-color: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.5); color: var(--text-light); padding: var(--spacing-xs) var(--spacing-sm); margin: 0; font-size: var(--font-size-xs); border-radius: var(--border-radius-sm); cursor: pointer; transition: background-color var(--transition-speed) var(--transition-timing); flex-shrink: 0; }
+   .snooze-options button:hover, #dismiss-alarm:hover, #resume-alarms:hover, #force-resume-alarms:hover { background-color: rgba(255, 255, 255, 0.4); border-color: rgba(255, 255, 255, 0.8); }
+   #dismiss-alarm { background-color: var(--primary-dark); border: none; margin-left: auto; margin-top: var(--spacing-sm); }
+   #resume-alarms, #force-resume-alarms { background-color: var(--success-color); border: none; }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Animations
+      -------------------------------------------------------------------------- */
+   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+   @keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+   @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+   
+   
+   /* --------------------------------------------------------------------------
+      * Responsive Design
+      -------------------------------------------------------------------------- */
+   @media (max-width: 992px) {
+        main { padding: var(--spacing-lg) var(--spacing-md); }
+        header { padding: var(--spacing-md); }
+        .section-header, .section-header-inline { margin-bottom: var(--spacing-md); }
+   }
+   
+   @media (max-width: 768px) {
+       html { font-size: 95%; }
+       header { flex-direction: column; align-items: flex-start; padding: var(--spacing-sm) var(--spacing-md); }
+       header h1 { font-size: 1.5rem; margin-bottom: var(--spacing-xs); }
+       #current-time { align-self: flex-end; }
+       main { padding: var(--spacing-md) var(--spacing-sm); }
+       .status-grid { grid-template-columns: 1fr; gap: var(--spacing-md); }
+       .modal-content { width: 95%; margin: 5% auto; padding: var(--spacing-md); }
+       #modal-title { padding-right: 70px; /* More space for buttons on mobile */ }
+       .tabs { padding-bottom: var(--spacing-xs); }
+       #event-list li { flex-direction: column; align-items: flex-start; gap: var(--spacing-xs); }
+       #event-list .event-time { min-width: auto; font-size: var(--font-size-xs); }
+       #event-list .event-actions { margin-top: var(--spacing-sm); align-self: flex-end; margin-left: 0; }
+       .alarm { bottom: var(--spacing-sm); left: var(--spacing-sm); right: var(--spacing-sm); width: auto; max-width: none; }
+       #pump-schedule-settings button { margin-left: 0; width: 100%; margin-top: var(--spacing-sm); }
+       .filter-controls { flex-direction: column; align-items: stretch; }
+       .filter-controls select { width: 100%; }
+   }
+   
+   @media (max-width: 480px) {
+       html { font-size: 90%; }
+       header h1 { font-size: 1.3rem; }
+       h2 { font-size: 1.4rem; }
+       h3 { font-size: 1.1rem; }
+       .status-card { padding: var(--spacing-sm); }
+       .progress-bar { height: 18px; } /* Ensure label is visible */
+       .progress-bar-label { font-size: 10px; } /* Smaller label on small screens */
+       .snooze-options { font-size: var(--font-size-xs); }
+       .snooze-options button { padding: 3px 6px; }
+       .button-group { flex-direction: column; } /* Stack buttons in group */
+       .button-group .quick-action { width: 100%; }
+       .button-group .quick-action.small { width: 100%; }
+   }
