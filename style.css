@@ -238,7 +238,7 @@
 }
 
 /* High contrast mode support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
     :root {
         --primary-color: hsl(var(--primary-hue), 100%, 40%);
         --border-color: hsl(220, 9%, 20%);
@@ -518,6 +518,7 @@ small, .text-small {
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -783,7 +784,7 @@ small, .text-small {
     z-index: var(--z-bottom-nav);
     transition: background-color var(--transition-speed) var(--ease-in-out), 
                 border-color var(--transition-speed) var(--ease-in-out);
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-bottom: env(safe-area-inset-bottom);
     box-shadow: var(--shadow-ambient);
 }
 
@@ -3521,39 +3522,7 @@ input[type="range"]:focus-visible {
     );
 }
 
-/* Add dark mode support for certain browsers */
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-        --primary-color: hsl(var(--primary-hue), 92%, 76%);
-        --primary-dark: hsl(var(--primary-hue), 72%, 69%);
-        --primary-light: hsl(var(--primary-hue), 95%, 83%);
-        --primary-very-light: hsl(var(--primary-hue), 15%, 20%);
-        --primary-transparent: hsla(var(--primary-hue), 92%, 76%, 0.1);
-        
-        --secondary-color: hsl(var(--secondary-hue), 50%, 70%);
-        --secondary-light: hsl(var(--secondary-hue), 35%, 45%);
-        --secondary-dark: hsl(var(--secondary-hue), 60%, 60%);
-        --secondary-transparent: hsla(var(--secondary-hue), 50%, 70%, 0.1);
-        
-        --accent-color: hsl(var(--accent-hue), 80%, 62%);
-        --accent-light: hsl(var(--accent-hue), 70%, 40%);
-        --accent-dark: hsl(var(--accent-hue), 90%, 70%);
-        --accent-transparent: hsla(var(--accent-hue), 80%, 62%, 0.1);
-        
-        --danger-color: hsl(var(--danger-hue), 81%, 72%);
-        --danger-light: hsl(var(--danger-hue), 61%, 56%);
-        --danger-dark: hsl(var(--danger-hue), 90%, 80%);
-        --danger-transparent: hsla(var(--danger-hue), 81%, 72%, 0.1);
-        
-        --text-color: hsl(210, 17%, 92%);
-        --text-secondary: hsl(210, 9%, 70%);
-        --text-tertiary: hsl(210, 7%, 60%);
-        --text-disabled: hsl(210, 5%, 45%);
-        --background-color: hsl(223, 6%, 13%);
-        --surface-color: hsl(223, 4%, 16%);
-        --surface-high: hsl(223, 4%, 19%);
-        --surface-low: hsl(223, 4%, 11%);
-        --border-color: hsl(223,/*==============================================================================
+/*==============================================================================
  * Baby Tracker Pro - Advanced Stylesheet
  * Version: 2.0
  * 
@@ -7918,4 +7887,4 @@ input[type="radio"],
 .z-50 { z-index: 50 !important; }
 .z-auto { z-index: auto !important; }
 
-/* End of stylesheet */)}}
+/* End of stylesheet */
