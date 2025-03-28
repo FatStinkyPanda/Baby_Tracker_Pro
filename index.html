@@ -3,30 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Baby Tracker Pro - Track feeding, diapers, sleep, and predict your baby's needs with insightful analysis.">
+    <meta name="description" content="Baby Tracker Pro - Comprehensive tracking and analytics for your baby's feeding, sleep, growth, milestones, and health with predictive insights.">
+    <meta name="theme-color" content="#6ECDCF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <title>Baby Tracker Pro</title>
 
     <!-- Favicon (Emoji SVG - works in modern browsers) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
+    
+    <!-- Apple Touch Icon for iOS home screen -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%236ECDCF%22 /><text y=%22.83em%22 font-size=%2280%22 x=%2210%22>🍼</text></svg>">
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Chart.js Library (Use CDN or download locally) -->
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vrG4FmQ=" crossorigin="anonymous"></script>
-    <!-- Consider adding integrity checks if using CDN -->
+    
+    <!-- Optional: Chart.js Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
 </head>
-<body>
+<body class="theme-light">
 
     <!-- ======================================================================
          Header
          ====================================================================== -->
     <header>
-        <h1>Baby Tracker Pro</h1>
-        <div id="current-time" role="timer" aria-live="polite">Loading time...</div>
+        <div class="header-left">
+            <h1>Baby Tracker Pro</h1>
+            <span class="baby-name" id="header-baby-name">Baby</span>
+        </div>
+        <div class="header-right">
+            <div id="current-time" role="timer" aria-live="polite">Loading time...</div>
+            <button id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+                <span class="theme-icon light">☀️</span>
+                <span class="theme-icon dark">🌙</span>
+            </button>
+            <button id="quick-add-button" aria-label="Quick add new entry" title="Quick add">+</button>
+        </div>
     </header>
+
+    <!-- ======================================================================
+         Quick Action Menu (Hidden by default)
+         ====================================================================== -->
+    <div id="quick-action-menu" class="quick-action-menu" style="display: none;">
+        <div class="quick-action-container">
+            <button class="quick-action-item" data-action="logFeed">
+                <span class="icon">🍼</span>
+                <span class="label">Feed</span>
+            </button>
+            <button class="quick-action-item" data-action="logDiaper">
+                <span class="icon">💩</span>
+                <span class="label">Diaper</span>
+            </button>
+            <button class="quick-action-item" data-action="toggleSleep">
+                <span class="icon">😴</span>
+                <span class="label" id="sleep-quick-label">Sleep</span>
+            </button>
+            <button class="quick-action-item" data-action="logPump">
+                <span class="icon">🥛</span>
+                <span class="label">Pump</span>
+            </button>
+            <button class="quick-action-item" data-action="logGrowth">
+                <span class="icon">📏</span>
+                <span class="label">Growth</span>
+            </button>
+            <button class="quick-action-item" data-action="logTemperature">
+                <span class="icon">🌡️</span>
+                <span class="label">Temp</span>
+            </button>
+            <button class="quick-action-item" data-action="logMedicine">
+                <span class="icon">💊</span>
+                <span class="label">Medicine</span>
+            </button>
+            <button class="quick-action-item" data-action="logMilestone">
+                <span class="icon">🏆</span>
+                <span class="label">Milestone</span>
+            </button>
+        </div>
+    </div>
 
     <!-- ======================================================================
          Main Content Area
@@ -37,14 +95,44 @@
              Dashboard Section: Quick Overview & Actions
              ------------------------------------------------------------------ -->
         <section class="dashboard" aria-labelledby="dashboard-heading">
-            <h2 id="dashboard-heading">Dashboard</h2>
-            <div class="status-grid">
+            <div class="section-header">
+                <h2 id="dashboard-heading">Dashboard</h2>
+                <div class="dashboard-actions">
+                    <button id="dashboard-customize" class="icon-button" title="Customize dashboard">
+                        <span class="icon">⚙️</span>
+                    </button>
+                    <button id="dashboard-refresh" class="icon-button" title="Refresh data">
+                        <span class="icon">🔄</span>
+                    </button>
+                </div>
+            </div>
 
+            <!-- Optional: Baby Age Summary if DOB is set -->
+            <div id="baby-age-banner" class="baby-age-banner" style="display: none;">
+                <div class="baby-info">
+                    <span id="baby-name-display">Baby</span> is 
+                    <span id="baby-age-display">0 months, 0 days</span> old
+                </div>
+                <div class="baby-milestones">
+                    <a href="#" id="view-milestones-link">View milestones for this age</a>
+                </div>
+            </div>
+
+            <!-- Optional: Pattern Detection Alerts -->
+            <div id="anomaly-container" class="alert-container" style="display: none;">
+                <!-- Filled by JavaScript -->
+            </div>
+
+            <div class="status-grid">
                 <!-- Feeding Status Card -->
                 <div class="status-card">
-                    <h3><span class="icon" aria-hidden="true">🍼</span> Feeding</h3>
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">🍼</span> Feeding</h3>
+                        <button class="log-button" data-action="logFeed" aria-label="Log feeding">+</button>
+                    </div>
                     <div class="last-event">Last: <span id="last-feed-time">N/A</span> (<span id="last-feed-details"></span>)</div>
                     <div class="next-prediction">Next Estimate: <span id="next-feed-prediction">Calculating...</span></div>
+                    <div class="alt-predictions-container"></div>
                     <div class="progress-bar-container" aria-label="Feeding progress">
                         <div id="feed-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
@@ -53,7 +141,10 @@
 
                 <!-- Diaper Status Card -->
                 <div class="status-card">
-                    <h3><span class="icon" aria-hidden="true">💩</span> Diaper</h3>
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">💩</span> Diaper</h3>
+                        <button class="log-button" data-action="logDiaper" aria-label="Log diaper">+</button>
+                    </div>
                     <div class="last-event">Last Change: <span id="last-diaper-time">N/A</span> (<span id="last-diaper-type"></span>)</div>
                     <div class="next-prediction">Next Wet Est.: <span id="next-wet-prediction">Calculating...</span></div>
                     <div class="next-prediction">Next Dirty Est.: <span id="next-dirty-prediction">Calculating...</span></div>
@@ -68,7 +159,10 @@
 
                 <!-- Sleep Status Card -->
                 <div class="status-card">
-                    <h3><span class="icon" aria-hidden="true">😴</span> Sleep</h3>
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">😴</span> Sleep</h3>
+                        <button class="log-button" data-action="logSleep" aria-label="Log sleep">+</button>
+                    </div>
                     <div class="last-event">Last Sleep Started: <span id="last-sleep-start-time">N/A</span></div>
                     <div class="last-event">Last Sleep Ended: <span id="last-sleep-end-time">N/A</span> (<span id="last-sleep-duration"></span>)</div>
                     <div class="next-prediction">Next Nap Est.: <span id="next-sleep-prediction">Calculating...</span></div>
@@ -80,7 +174,10 @@
 
                  <!-- Pumping Status Card -->
                 <div class="status-card">
-                    <h3><span class="icon" aria-hidden="true">🥛</span> Pumping</h3>
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">🥛</span> Pumping</h3>
+                        <button class="log-button" data-action="logPump" aria-label="Log pump">+</button>
+                    </div>
                     <div class="last-event">Last Pump: <span id="last-pump-time">N/A</span> (<span id="last-pump-amount"></span>)</div>
                     <div class="next-prediction">Next Scheduled: <span id="next-pump-schedule">Set schedule...</span></div>
                     <div class="progress-bar-container" aria-label="Pumping progress">
@@ -90,6 +187,96 @@
                     <button class="quick-action secondary" data-action="managePumpSchedule">Schedule</button>
                 </div>
 
+                <!-- Growth Status Card (New) -->
+                <div class="status-card">
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">📏</span> Growth</h3>
+                        <button class="log-button" data-action="logGrowth" aria-label="Log growth measurement">+</button>
+                    </div>
+                    <div class="growth-summary" id="growth-summary">
+                        <div class="growth-item">
+                            <span class="growth-label">Weight:</span>
+                            <span class="growth-value" id="last-weight">Not recorded</span>
+                        </div>
+                        <div class="growth-item">
+                            <span class="growth-label">Length:</span>
+                            <span class="growth-value" id="last-length">Not recorded</span>
+                        </div>
+                        <div class="growth-item">
+                            <span class="growth-label">Head:</span>
+                            <span class="growth-value" id="last-head">Not recorded</span>
+                        </div>
+                    </div>
+                    <button class="quick-action" data-action="logGrowth">Add Measurement</button>
+                    <button class="quick-action secondary" data-action="viewGrowthChart">View Chart</button>
+                </div>
+
+                <!-- Health Status Card (New) -->
+                <div class="status-card">
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">🌡️</span> Health</h3>
+                        <div class="multi-actions">
+                            <button class="log-button" data-action="logTemperature" aria-label="Log temperature">🌡️</button>
+                            <button class="log-button" data-action="logMedicine" aria-label="Log medicine">💊</button>
+                        </div>
+                    </div>
+                    <div class="last-event">Temperature: <span id="last-temperature">N/A</span></div>
+                    <div class="last-event">Last Medicine: <span id="last-medicine">N/A</span></div>
+                    <div class="next-prediction">Next Med: <span id="next-medicine-time">None scheduled</span></div>
+                    <button class="quick-action" data-action="logTemperature">Log Temperature</button>
+                    <button class="quick-action secondary" data-action="logMedicine">Log Medicine</button>
+                </div>
+
+                <!-- Milestones Status Card (New) -->
+                <div class="status-card">
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">🏆</span> Milestones</h3>
+                        <button class="log-button" data-action="logMilestone" aria-label="Log milestone">+</button>
+                    </div>
+                    <div class="last-event">Last Achieved: <span id="last-milestone">N/A</span></div>
+                    <div class="upcoming-milestones" id="upcoming-milestones-preview">
+                        <span class="milestone-title">For this age:</span>
+                        <ul id="milestone-preview-list">
+                            <li>Set baby's DOB in settings</li>
+                        </ul>
+                    </div>
+                    <button class="quick-action" data-action="logMilestone">Log Milestone</button>
+                    <button class="quick-action secondary" data-action="viewMilestones">All Milestones</button>
+                </div>
+
+                <!-- Summary Stats Card (New) -->
+                <div class="status-card summary-card">
+                    <div class="card-header">
+                        <h3><span class="icon" aria-hidden="true">📊</span> Today's Summary</h3>
+                    </div>
+                    <div class="summary-stats" id="today-stats-summary">
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <span class="stat-icon">🍼</span>
+                                <span class="stat-value" id="today-feeds-count">0</span>
+                                <span class="stat-label">Feeds</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💩</span>
+                                <span class="stat-value" id="today-diapers-count">0</span>
+                                <span class="stat-label">Diapers</span>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-item">
+                                <span class="stat-icon">😴</span>
+                                <span class="stat-value" id="today-sleep-hours">0h</span>
+                                <span class="stat-label">Sleep</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🥛</span>
+                                <span class="stat-value" id="today-pump-amount">0oz</span>
+                                <span class="stat-label">Pumped</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="quick-action" data-action="viewReports">View Full Report</button>
+                </div>
             </div>
         </section>
 
@@ -98,12 +285,16 @@
              ------------------------------------------------------------------ -->
         <div id="log-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
             <div class="modal-content">
-                <button class="close-button" aria-label="Close modal">&times;</button>
-                <h3 id="modal-title">Log Event</h3>
-                <form id="log-form" novalidate>
-                    <!-- Form fields will be dynamically generated by script.js -->
-                    <p>Loading form...</p>
-                </form>
+                <div class="modal-header">
+                    <h3 id="modal-title">Log Event</h3>
+                    <button class="close-button" aria-label="Close modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="log-form" novalidate>
+                        <!-- Form fields will be dynamically generated by script.js -->
+                        <p>Loading form...</p>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -115,7 +306,6 @@
                 <span id="alarm-message">Alarm Message Placeholder</span>
                 <div class="snooze-options">
                     <span>Snooze:</span>
-                    <!-- Snooze durations are examples, ensure they match script.js -->
                     <button data-snooze="5" aria-label="Snooze alarm for 5 minutes">5m</button>
                     <button data-snooze="10" aria-label="Snooze alarm for 10 minutes">10m</button>
                     <button data-snooze="20" aria-label="Snooze alarm for 20 minutes">20m</button>
@@ -124,115 +314,483 @@
                     <button data-snooze="pause" class="secondary" aria-label="Pause all alarms until resumed">Pause All</button>
                 </div>
                 <button id="dismiss-alarm" aria-label="Dismiss this alarm">Dismiss</button>
-                <!-- This button is shown only when paused via the alarm popup -->
-                 <button id="resume-alarms" style="display: none;" aria-label="Resume alarms">Resume Alarms</button>
+                <button id="resume-alarms" style="display: none;" aria-label="Resume alarms">Resume Alarms</button>
             </div>
         </div>
 
         <!-- ------------------------------------------------------------------
-             Data Analysis Section (Tabs)
+             Data Analysis Section (Enhanced Tabs)
              ------------------------------------------------------------------ -->
         <section class="data-analysis" aria-labelledby="analysis-heading">
-            <h2 id="analysis-heading">Analysis &amp; History</h2>
+            <h2 id="analysis-heading">Analysis &amp; Records</h2>
 
             <!-- Tab Navigation -->
             <nav class="tabs" role="tablist" aria-label="Data Sections">
-                <button class="tab-link active" role="tab" aria-selected="true" aria-controls="history" data-tab="history">Event History</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="charts" data-tab="charts">Charts</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="reports" data-tab="reports">Reports &amp; Projections</button>
-                <button class="tab-link" role="tab" aria-selected="false" aria-controls="settings" data-tab="settings">Settings</button>
+                <button class="tab-link active" role="tab" aria-selected="true" aria-controls="history" data-tab="history">
+                    <span class="tab-icon">📝</span>
+                    <span>History</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="charts" data-tab="charts">
+                    <span class="tab-icon">📊</span>
+                    <span>Charts</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="reports" data-tab="reports">
+                    <span class="tab-icon">📋</span>
+                    <span>Reports</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="growth" data-tab="growth">
+                    <span class="tab-icon">📏</span>
+                    <span>Growth</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="milestones" data-tab="milestones">
+                    <span class="tab-icon">🏆</span>
+                    <span>Milestones</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="health" data-tab="health">
+                    <span class="tab-icon">🏥</span>
+                    <span>Health</span>
+                </button>
+                <button class="tab-link" role="tab" aria-selected="false" aria-controls="settings" data-tab="settings">
+                    <span class="tab-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
             </nav>
 
             <!-- Tab Content Panels -->
             <div id="history" class="tab-content active" role="tabpanel" aria-labelledby="history-tab">
-                <h3>Event History</h3>
-                <div class="filter-controls">
-                    <label for="history-filter">Filter by Type:</label>
-                    <select id="history-filter">
-                        <option value="all">All Events</option>
-                        <option value="feeding">Feeding</option>
-                        <option value="diaper">Diaper</option>
-                        <option value="sleep">Sleep</option>
-                        <option value="pump">Pumping</option>
-                        <option value="mood">Mood</option> <!-- Example: Add other types as needed -->
-                        <option value="gas">Gas/Fussiness</option>
-                    </select>
-                    <label for="history-limit">Show:</label>
-                    <select id="history-limit">
-                        <option value="25">Last 25</option>
-                        <option value="50">Last 50</option>
-                        <option value="100">Last 100</option>
-                        <option value="all">Show All</option>
-                    </select>
+                <div class="tab-header">
+                    <h3>Event History</h3>
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="history-filter">Type:</label>
+                            <select id="history-filter">
+                                <option value="all">All Events</option>
+                                <option value="feeding">Feeding</option>
+                                <option value="diaper">Diaper</option>
+                                <option value="sleep">Sleep</option>
+                                <option value="pump">Pumping</option>
+                                <option value="mood">Mood</option>
+                                <option value="gas">Gas</option>
+                                <option value="temperature">Temperature</option>
+                                <option value="medicine">Medicine</option>
+                                <option value="milestone">Milestone</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="history-limit">Show:</label>
+                            <select id="history-limit">
+                                <option value="25">Last 25</option>
+                                <option value="50">Last 50</option>
+                                <option value="100">Last 100</option>
+                                <option value="all">Show All</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="date-range">Date:</label>
+                            <select id="date-range">
+                                <option value="all">All Time</option>
+                                <option value="today" selected>Today</option>
+                                <option value="yesterday">Yesterday</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <ul id="event-list" aria-live="polite">
-                    <!-- Event list items will be populated by script.js -->
-                    <li>Loading history...</li>
-                </ul>
+                
+                <div class="event-list-container">
+                    <ul id="event-list" aria-live="polite">
+                        <!-- Event list items will be populated by script.js -->
+                        <li>Loading history...</li>
+                    </ul>
+                </div>
+                
+                <div class="tab-footer">
+                    <button id="export-history" class="secondary">Export This View</button>
+                </div>
             </div>
 
             <div id="charts" class="tab-content" role="tabpanel" aria-labelledby="charts-tab" style="display: none;">
-                <h3>Charts</h3>
-                 <div class="chart-controls">
-                     <label for="chart-type">Select Chart:</label>
-                     <select id="chart-type">
-                        <option value="feedAmount">Feeding Amount/Duration (Daily)</option>
-                        <option value="feedFrequency">Feeding Frequency (Hourly)</option>
-                        <option value="sleepDuration">Sleep Duration (Daily)</option>
-                        <option value="diaperCount">Diaper Count (Daily)</option>
-                        <option value="pumpAmount">Pumping Amount (Daily)</option>
-                     </select>
-                 </div>
-                 <div class="chart-container">
+                <div class="tab-header">
+                    <h3>Charts &amp; Visualizations</h3>
+                    <div class="chart-controls">
+                        <label for="chart-type">Select Chart:</label>
+                        <select id="chart-type">
+                            <option value="feedAmount">Feeding Amount/Duration</option>
+                            <option value="feedFrequency">Feeding Frequency (Hourly)</option>
+                            <option value="sleepDuration">Sleep Duration</option>
+                            <option value="sleepPattern">Sleep Pattern Analysis</option>
+                            <option value="diaperCount">Diaper Count</option>
+                            <option value="pumpAmount">Pumping Amount</option>
+                            <option value="medicineSchedule">Medicine Schedule</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
                     <canvas id="main-chart" role="img" aria-label="Data chart visualization"></canvas>
-                 </div>
-            </div>
-
-            <div id="reports" class="tab-content" role="tabpanel" aria-labelledby="reports-tab" style="display: none;">
-                <h3>Reports &amp; Projections</h3>
-                <div id="report-content">
-                     <h4>Daily Summary (Today)</h4>
-                     <ul id="daily-summary" aria-live="polite"><li>Calculating...</li></ul>
-
-                     <h4>Next 24 Hours Projection (Estimates)</h4>
-                     <p><small>Note: Projections are estimates based on recent patterns and may vary.</small></p>
-                     <ul id="24h-projection" aria-live="polite"><li>Calculating...</li></ul>
-
-                     <!-- Add space for future weekly/monthly reports -->
+                </div>
+                
+                <div class="chart-insight" id="chart-insight">
+                    <h4>Insights</h4>
+                    <p>Select a chart to view data-driven insights.</p>
                 </div>
             </div>
 
-             <div id="settings" class="tab-content" role="tabpanel" aria-labelledby="settings-tab" style="display: none;">
+            <div id="reports" class="tab-content" role="tabpanel" aria-labelledby="reports-tab" style="display: none;">
+                <div class="tab-header">
+                    <h3>Reports &amp; Projections</h3>
+                    <div class="report-controls">
+                        <label for="report-period">Period:</label>
+                        <select id="report-period">
+                            <option value="today" selected>Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="report-content">
+                    <div class="report-section">
+                        <h4>Daily Summary</h4>
+                        <ul id="daily-summary" aria-live="polite"><li>Calculating...</li></ul>
+                    </div>
+
+                    <div class="report-section">
+                        <h4>Next 24 Hours Projection</h4>
+                        <p class="report-note">Note: Projections are estimates based on recent patterns and may vary.</p>
+                        <ul id="24h-projection" aria-live="polite"><li>Calculating...</li></ul>
+                    </div>
+                    
+                    <div class="report-section pattern-section">
+                        <h4>Detected Patterns</h4>
+                        <div id="pattern-display">
+                            <p>Looking for patterns... needs more data.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-footer">
+                    <button id="export-report" class="secondary">Export Report</button>
+                    <button id="print-report" class="secondary">Print</button>
+                </div>
+            </div>
+
+            <div id="growth" class="tab-content" role="tabpanel" aria-labelledby="growth-tab" style="display: none;">
+                <div class="tab-header">
+                    <h3>Growth Tracking</h3>
+                    <div class="growth-controls">
+                        <label for="growth-type">Measurement:</label>
+                        <select id="growth-type">
+                            <option value="weight">Weight</option>
+                            <option value="length">Length/Height</option>
+                            <option value="headCircumference">Head Circumference</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="growth-chart-container">
+                    <canvas id="growth-chart" role="img" aria-label="Growth chart visualization"></canvas>
+                </div>
+                
+                <div class="growth-history">
+                    <h4>Measurement History</h4>
+                    <div class="growth-table-container">
+                        <table id="growth-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Weight</th>
+                                    <th>Length</th>
+                                    <th>Head</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="growth-table-body">
+                                <tr>
+                                    <td colspan="5">No growth data yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="tab-footer">
+                    <button data-action="logGrowth" class="primary">Add Measurement</button>
+                </div>
+            </div>
+
+            <div id="milestones" class="tab-content" role="tabpanel" aria-labelledby="milestones-tab" style="display: none;">
+                <div class="tab-header">
+                    <h3>Developmental Milestones</h3>
+                    <div class="milestone-controls">
+                        <label for="milestone-filter">View:</label>
+                        <select id="milestone-filter">
+                            <option value="age">For Current Age</option>
+                            <option value="upcoming">Upcoming</option>
+                            <option value="completed">Completed</option>
+                            <option value="all">All Milestones</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="milestones-container">
+                    <!-- Will be populated by script.js -->
+                    <p>Please set your baby's date of birth in settings to track milestones.</p>
+                </div>
+                
+                <div class="tab-footer">
+                    <button data-action="logMilestone" class="primary">Log New Milestone</button>
+                </div>
+            </div>
+
+            <div id="health" class="tab-content" role="tabpanel" aria-labelledby="health-tab" style="display: none;">
+                <div class="tab-header">
+                    <h3>Health Tracking</h3>
+                </div>
+
+                <!-- Temperature Section -->
+                <div class="health-section temperature-section">
+                    <h4>Temperature Records</h4>
+                    <div class="temperature-chart-container">
+                        <canvas id="temperature-chart" role="img" aria-label="Temperature chart"></canvas>
+                    </div>
+                    
+                    <div class="temperature-table-container">
+                        <table id="temperature-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Temperature</th>
+                                    <th>Location</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="temperature-table-body">
+                                <tr>
+                                    <td colspan="5">No temperature data yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Medicine Section -->
+                <div class="health-section medicine-section">
+                    <div class="medicine-header">
+                        <h4>Medicine Log</h4>
+                        <button id="schedule-medicine" class="secondary">Schedule Medicine</button>
+                    </div>
+                    
+                    <div class="medicine-table-container">
+                        <table id="medicine-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Medicine</th>
+                                    <th>Dose</th>
+                                    <th>Notes</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="medicine-table-body">
+                                <tr>
+                                    <td colspan="5">No medicine records yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="tab-footer">
+                    <button data-action="logTemperature" class="primary">Log Temperature</button>
+                    <button data-action="logMedicine" class="primary">Log Medicine</button>
+                </div>
+            </div>
+
+            <div id="settings" class="tab-content" role="tabpanel" aria-labelledby="settings-tab" style="display: none;">
                 <h3>Settings</h3>
+                
+                <!-- Baby Information -->
+                <div class="settings-section">
+                    <h4>Baby Information</h4>
+                    <div class="settings-row">
+                        <div class="settings-field">
+                            <label for="baby-name">Baby's Name:</label>
+                            <input type="text" id="baby-name" placeholder="Your baby's name">
+                        </div>
+                        <div class="settings-field">
+                            <label for="baby-dob">Date of Birth:</label>
+                            <input type="date" id="baby-dob">
+                        </div>
+                        <div class="settings-field">
+                            <label for="baby-gender">Gender (for growth charts):</label>
+                            <select id="baby-gender">
+                                <option value="">Not specified</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
-                <h4>Data Management</h4>
-                <button id="export-data">Export Data Backup</button>
-                <label for="import-data-file" class="button-like-label">Import Data Backup</label>
-                <input type="file" id="import-data-file" accept=".json" aria-label="Select backup file to import">
-                <button id="clear-data" class="danger">Clear All Data</button>
-                <p><small>Exports create a JSON file backup. Imports overwrite current data.</small></p>
+                <!-- Parent Information -->
+                <div class="settings-section">
+                    <h4>Parent Information</h4>
+                    <div class="settings-row">
+                        <div class="settings-field">
+                            <label for="primary-parent">Primary Parent Name:</label>
+                            <input type="text" id="primary-parent" placeholder="Your name">
+                        </div>
+                        <div class="settings-field">
+                            <label for="secondary-parent">Secondary Parent/Caregiver:</label>
+                            <input type="text" id="secondary-parent" placeholder="Partner/caregiver name">
+                        </div>
+                    </div>
+                </div>
 
-                <h4>Alarm Settings</h4>
-                 <label for="alarm-sound-enabled">
-                     <input type="checkbox" id="alarm-sound-enabled" checked>
-                     Enable Alarm Sound (Simple Beep)
-                 </label>
-                 <p>Alarms Globally Paused: <strong id="alarm-pause-status">No</strong></p>
-                 <button id="force-resume-alarms" class="secondary" style="display: none;">Force Resume Alarms (Clear Snoozes)</button>
+                <!-- Preferences -->
+                <div class="settings-section">
+                    <h4>Preferences</h4>
+                    <div class="settings-row">
+                        <div class="settings-field">
+                            <label for="theme-select">Theme:</label>
+                            <select id="theme-select">
+                                <option value="light">Light Mode</option>
+                                <option value="dark">Dark Mode</option>
+                                <option value="auto">System Default</option>
+                            </select>
+                        </div>
+                        <div class="settings-field">
+                            <label for="time-format">Time Format:</label>
+                            <select id="time-format">
+                                <option value="12">12-hour (AM/PM)</option>
+                                <option value="24">24-hour</option>
+                            </select>
+                        </div>
+                        <div class="settings-field">
+                            <label for="date-format">Date Format:</label>
+                            <select id="date-format">
+                                <option value="M/D/YYYY">MM/DD/YYYY</option>
+                                <option value="D/M/YYYY">DD/MM/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                <option value="MMM D, YYYY">MMM D, YYYY</option>
+                            </select>
+                        </div>
+                    </div>
 
-                 <h4>Pumping Schedule</h4>
-                 <div id="pump-schedule-settings">
-                     <label for="pump-interval">Pump approx. every (hours):</label>
-                     <input type="number" id="pump-interval" min="1" max="12" step="0.5" placeholder="e.g., 3">
+                    <!-- Units -->
+                    <div class="settings-row">
+                        <div class="settings-field">
+                            <label for="temp-unit">Temperature Unit:</label>
+                            <select id="temp-unit">
+                                <option value="f">Fahrenheit (°F)</option>
+                                <option value="c">Celsius (°C)</option>
+                            </select>
+                        </div>
+                        <div class="settings-field">
+                            <label for="weight-unit">Weight Unit:</label>
+                            <select id="weight-unit">
+                                <option value="lb">Pounds/Ounces (lb/oz)</option>
+                                <option value="kg">Kilograms (kg)</option>
+                            </select>
+                        </div>
+                        <div class="settings-field">
+                            <label for="length-unit">Length Unit:</label>
+                            <select id="length-unit">
+                                <option value="in">Inches (in)</option>
+                                <option value="cm">Centimeters (cm)</option>
+                            </select>
+                        </div>
+                    </div>
 
-                     <label for="pump-start-time">Preferred start time (optional):</label>
-                     <input type="time" id="pump-start-time">
+                    <!-- Features -->
+                    <div class="settings-row checkboxes">
+                        <div class="settings-field checkbox">
+                            <input type="checkbox" id="advanced-predictions" checked>
+                            <label for="advanced-predictions">Advanced Predictions</label>
+                        </div>
+                        <div class="settings-field checkbox">
+                            <input type="checkbox" id="voice-input-enabled">
+                            <label for="voice-input-enabled">Voice Input</label>
+                        </div>
+                        <div class="settings-field checkbox">
+                            <input type="checkbox" id="notify-milestones" checked>
+                            <label for="notify-milestones">Milestone Alerts</label>
+                        </div>
+                    </div>
+                </div>
 
-                     <button id="save-pump-schedule">Save Schedule</button>
-                 </div>
-                 <p>Current Schedule: <span id="current-pump-schedule-display">Not set</span></p>
+                <!-- Alarm Settings -->
+                <div class="settings-section">
+                    <h4>Alarm Settings</h4>
+                    <div class="settings-row checkboxes">
+                        <div class="settings-field checkbox">
+                            <input type="checkbox" id="alarm-sound-enabled" checked>
+                            <label for="alarm-sound-enabled">Enable Alarm Sound</label>
+                        </div>
+                    </div>
+                    <p>Alarms Globally Paused: <strong id="alarm-pause-status">No</strong></p>
+                    <button id="force-resume-alarms" class="secondary" style="display: none;">Force Resume Alarms (Clear Snoozes)</button>
+                </div>
 
-             </div>
+                <!-- Pumping Schedule -->
+                <div class="settings-section">
+                    <h4>Pumping Schedule</h4>
+                    <div id="pump-schedule-settings">
+                        <div class="settings-row">
+                            <div class="settings-field">
+                                <label for="pump-interval">Pump approx. every (hours):</label>
+                                <input type="number" id="pump-interval" min="1" max="12" step="0.5" placeholder="e.g., 3">
+                            </div>
+                            <div class="settings-field">
+                                <label for="pump-start-time">Preferred start time (optional):</label>
+                                <input type="time" id="pump-start-time">
+                            </div>
+                        </div>
+                        <button id="save-pump-schedule">Save Schedule</button>
+                    </div>
+                    <p>Current Schedule: <span id="current-pump-schedule-display">Not set</span></p>
+                </div>
+
+                <!-- Backup Settings -->
+                <div class="settings-section">
+                    <h4>Automatic Backup</h4>
+                    <div class="settings-row">
+                        <div class="settings-field checkbox">
+                            <input type="checkbox" id="auto-backup" checked>
+                            <label for="auto-backup">Enable Auto-Backup</label>
+                        </div>
+                        <div class="settings-field">
+                            <label for="backup-interval">Backup every (hours):</label>
+                            <input type="number" id="backup-interval" min="1" max="168" step="1" value="24">
+                        </div>
+                    </div>
+                    <p>Last Backup: <span id="last-backup-time">No backup yet</span></p>
+                </div>
+
+                <!-- Data Management -->
+                <div class="settings-section">
+                    <h4>Data Management</h4>
+                    <div class="button-row">
+                        <button id="export-data" class="secondary">Export Data Backup</button>
+                        <label for="import-data-file" class="button-like-label secondary">Import Data Backup</label>
+                        <input type="file" id="import-data-file" accept=".json" aria-label="Select backup file to import">
+                    </div>
+                    <p class="danger-zone">Danger Zone:</p>
+                    <button id="clear-data" class="danger">Clear All Data</button>
+                    <p><small>Warning: Clearing data is permanent and cannot be undone.</small></p>
+                </div>
+                
+                <!-- About -->
+                <div class="settings-section">
+                    <h4>About Baby Tracker Pro</h4>
+                    <p>Version: <span id="app-version">2.0.0</span></p>
+                    <p>Created to help parents track and understand their baby's patterns.</p>
+                </div>
+            </div>
         </section>
 
     </main>
@@ -241,8 +799,32 @@
          Footer
          ====================================================================== -->
     <footer>
-        <p>&copy; Baby Tracker Pro - Helping parents one datapoint at a time.</p>
+        <div class="footer-content">
+            <p>&copy; Baby Tracker Pro - Helping parents one datapoint at a time</p>
+            <div class="footer-links">
+                <a href="#" id="privacy-link">Privacy</a>
+                <a href="#" id="help-link">Help</a>
+                <a href="#" id="feedback-link">Feedback</a>
+            </div>
+        </div>
     </footer>
+
+    <!-- Custom Snackbar/Toast for notifications -->
+    <div id="info-notification" class="info-notification" style="display: none;">
+        Notification message
+    </div>
+
+    <!-- Voice Command Interface -->
+    <div id="voice-command-interface" class="voice-interface" style="display: none;">
+        <div class="voice-interface-content">
+            <div class="voice-status">Listening...</div>
+            <div class="voice-visualization">
+                <div class="voice-wave"></div>
+            </div>
+            <div class="voice-instructions">Try saying: "log bottle feed" or "start sleep"</div>
+            <button class="voice-cancel">Cancel</button>
+        </div>
+    </div>
 
     <!-- ======================================================================
          JavaScript (Defer loading until DOM is ready)
